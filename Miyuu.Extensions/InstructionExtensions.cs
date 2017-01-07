@@ -90,5 +90,18 @@ namespace Miyuu.Extensions
 
 			return ins;
 		}
+
+		public static int Line(this IList<Instruction> insts, string keyWrd, int startLine = 0)
+		{
+			while (startLine < insts.Count)
+			{
+				if (insts[startLine].Operand != null && insts[startLine].ToString().EndsWith(keyWrd))
+				{
+					return startLine;
+				}
+				startLine++;
+			}
+			return -1;
+		}
 	}
 }

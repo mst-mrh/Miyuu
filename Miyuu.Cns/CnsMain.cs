@@ -8,7 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace Miyuu.Cns
 {
@@ -55,5 +57,39 @@ namespace Miyuu.Cns
 			Main.fontCombatText[1] = new SpriteFontCn(new Font(CnFont, 20.25F, GraphicsUnit.Pixel));
 			Main.fontCombatText[0] = new SpriteFontCn(new Font(CnFont, 17.55F, GraphicsUnit.Pixel));
 		}
-    }
+
+		public static void DrawGroupInfo(Color color)
+		{
+			const string groupInfo = "抗药又坚硬汉化组";
+
+			for (var i = 0; i < 5; i++)
+			{
+				var c6 = Color.Black;
+				if (i == 4)
+				{
+					c6 = color;
+					c6.R = (byte)((0 + c6.R) / 2);
+					c6.G = (byte)((255 + c6.R) / 2);
+					c6.B = (byte)((0 + c6.R) / 2);
+				}
+				c6.A = (byte)(c6.A * 0.3f);
+				var num107 = 0;
+				var num108 = 0;
+				if (i == 0)
+					num107 = -2;
+				if (i == 1)
+					num107 = 2;
+				if (i == 2)
+					num108 = -2;
+				if (i == 3)
+					num108 = 2;
+				var o3 = Main.fontMouseText.MeasureString(groupInfo);
+				o3.X *= 0.5f;
+				o3.Y *= 0.5f;
+				Main.spriteBatch.DrawString(Main.fontMouseText, groupInfo,
+					new Vector2(o3.X + num107 + 10f, Main.screenHeight - o3.Y + num108 - 22f), c6, 0f, o3, 1f, SpriteEffects.None, 0f);
+			}
+		}
+
+	}
 }

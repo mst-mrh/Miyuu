@@ -17,7 +17,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 		[ModApplyTo("*"), ModOrder(50)]
 		public void ReplaceTexts()
 		{
-			
+
 		}
 
 		public ChineseTextModifications() : base("导入中文文本") { }

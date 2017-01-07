@@ -229,7 +229,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 
 		public ClientChineseDisplayModifications() : base("中文显示支持") { }
 
-		public override IEnumerable<string> TargetAssemblys => new []
+		public override IEnumerable<string> TargetAssemblys => new[]
 		{
 			Terraria,
 			Otapi
