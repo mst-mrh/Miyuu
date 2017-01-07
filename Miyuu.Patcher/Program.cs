@@ -15,6 +15,7 @@ namespace Miyuu.Patcher
 		private static void Main(string[] args)
 		{
 			Console.WriteLine("Miyuu patcher v{0}", Assembly.GetExecutingAssembly().GetName().Version.ToString(2));
+			Console.WriteLine();
 
 			string input = string.Empty,
 				output = string.Empty;
@@ -29,6 +30,8 @@ namespace Miyuu.Patcher
 
 			if (!string.IsNullOrWhiteSpace(input))
 			{
+				Engine.Logging.InitLoggers();
+
 				output = !string.IsNullOrWhiteSpace(output) ? output : "Terraria_cn.exe";
 				var patcher = new Engine.Patcher(input, output);
 				patcher.Run();
