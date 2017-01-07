@@ -61,7 +61,7 @@ namespace Miyuu.Patcher.Engine
 			Console.WriteLine();
 
 			var types = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsSubclassOf(typeof(ModificationBase)));
-			var mods = new List<ModificationBase>();
+			var mods = new List<KeyValuePair<int, ModificationBase>>();
 
 			foreach (var t in types)
 			{
@@ -71,18 +71,21 @@ namespace Miyuu.Patcher.Engine
 				{
 					ins.Importer = _importer;
 					ins.SourceModuleDef = _module;
-					mods.Add(ins);
 
-					Console.WriteLine("修改 {0} 准备完毕!", ins.Name);
+					var order = t.GetCustomAttribute<ModOrderAttribute>()?.Order ?? 0;
+
+					mods.Add(new KeyValuePair<int, ModificationBase>(order, ins));
+
+					Console.WriteLine("模块 {0} 准备完毕!", ins.Name);
 				}
 			}
 
 			Console.WriteLine();
 			Console.WriteLine("开始运行修改..");
 
-			foreach (var m in mods)
+			foreach (var m in mods.OrderBy(m => m.Key))
 			{
-				m.Run();
+				m.Value.Run();
 			}
 
 			try

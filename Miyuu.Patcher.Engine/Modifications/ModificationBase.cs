@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using dnlib.DotNet;
 using NLog;
-using NLog.Fluent;
 
 namespace Miyuu.Patcher.Engine.Modifications
 {
@@ -33,7 +31,13 @@ namespace Miyuu.Patcher.Engine.Modifications
 
 			foreach (var m in GetType().GetMethods())
 			{
-				if (m.GetCustomAttribute<ModApplyToAttribute>()?.AssemblyNames.Contains(SourceModuleDef.Assembly.FullName) == true)
+				ModApplyToAttribute mat;
+				if ((mat = m.GetCustomAttribute<ModApplyToAttribute>()) != null &&
+					mat.AssemblyNames?.Length > 0 &&
+					(
+						mat.AssemblyNames.Contains(SourceModuleDef.Assembly.FullName) ||
+						mat.AssemblyNames.Contains("*"))
+					)
 				{
 					kvps.Add(new KeyValuePair<int, MethodInfo>(m.GetCustomAttribute<ModOrderAttribute>()?.Order ?? 0, m));
 				}
@@ -41,7 +45,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 
 			foreach (var kvp in kvps.OrderBy(k => k.Key))
 			{
-				Logger.Info("正在运行: {0}() .. ", kvp.Value.Name);
+				Logger.Info("{0}() Running .. ", kvp.Value.Name);
 				kvp.Value.Invoke(this, new object[] { });
 			}
 		}

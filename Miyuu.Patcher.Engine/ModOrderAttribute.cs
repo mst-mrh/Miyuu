@@ -2,7 +2,7 @@
 
 namespace Miyuu.Patcher.Engine
 {
-	[AttributeUsage(AttributeTargets.Method)]
+	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
 	public class ModOrderAttribute : Attribute
 	{
 		public int Order { get; }

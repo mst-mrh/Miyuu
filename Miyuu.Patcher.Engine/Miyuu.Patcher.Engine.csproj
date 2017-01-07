@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Logging.cs" />
+    <Compile Include="Modifications\ChineseTextModifications.cs" />
     <Compile Include="Modifications\ClientChineseDisplayModifications.cs" />
     <Compile Include="ModApplyToAttribute.cs" />
     <Compile Include="Modifications\ModificationBase.cs" />

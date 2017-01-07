@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
 using Microsoft.Xna.Framework;
@@ -53,17 +55,23 @@ namespace Miyuu.Patcher.Engine.Modifications
 		[ModApplyTo(Terraria), ModOrder(11)]
 		public void ReplaceDeclarations()
 		{
-			var sfType = Importer.ImportAsTypeSig(typeof(SpriteFont));
+			var main = SourceModuleDef.Find("Terraria.Main", true);
+
+			var inst = main.FindMethod(".cctor").Body.Instructions;
+
+			Info("替换字体声明类型..");
+			var line = inst.IndexOf(inst.Single(i => i.Operand?.ToString().EndsWith("fontCombatText") == true)) - 1;
+			inst[line] = OpCodes.Newarr.ToInstruction(Importer.ImportAsTypeSig(typeof(SpriteFontCn)).ScopeType);
 
 			foreach (var type in SourceModuleDef.Types)
 			{
-				ReplaceDs(type, sfType, SourceModuleDef.CorLibTypes.Int32);
+				ReplaceDs(type, Importer.ImportAsTypeSig(typeof(SpriteFont)), Importer.ImportAsTypeSig(typeof(SpriteFontCn)));
 			}
 
 			Info($"声明类型替换: {_declCount}");
 		}
 
-		[ModApplyTo(Terraria), ModOrder(12)]
+		[ModApplyTo(Terraria, Otapi), ModOrder(12)]
 		public void ReplaceDsCall()
 		{
 			const string ds = "DrawString";
@@ -167,17 +175,17 @@ namespace Miyuu.Patcher.Engine.Modifications
 
 		private static TypeSig RightType(TypeSig origin, TypeSig old, TypeSig @new)
 		{
-			if (!origin.IsArray && origin.FullName != old.FullName)
+			if (!origin.IsSZArray && origin.FullName != old.FullName)
 			{
 				return origin;
 			}
-			if (origin.IsArray && origin.Next.FullName != old.FullName)
+			if (origin.IsSZArray && origin.Next.FullName != old.FullName)
 			{
 				return origin;
 			}
 
 			_declCount++;
-			return origin.IsArray ? new SZArraySig(@new) : @new;
+			return origin.IsSZArray ? new SZArraySig(@new) : @new;
 		}
 
 		private static void ReplaceAllInstructions(TypeDef type, ReplaceItem[] replaces, ref int count)
