@@ -8,6 +8,7 @@ using dnlib.DotNet;
 using dnlib.DotNet.Emit;
 using Miyuu.Cns;
 using Miyuu.Extensions;
+using Miyuu.TextWrapper;
 
 namespace Miyuu.Patcher.Engine.Modifications
 {
@@ -252,6 +253,50 @@ namespace Miyuu.Patcher.Engine.Modifications
 				new { OpCodes.Ldarg_S, Operand = method.Parameters[5] },
 				new { OpCodes.Call, Operand = Importer.Import(typeof(ChineseTexts), "DeathMsg") }
 			);
+		}
+
+		[ModApplyTo("*")]
+		public void RewriteEvilGood()
+		{
+			Info("evilGood");
+			var method = SourceModuleDef.Find("Terraria.Lang", false).FindMethod("evilGood");
+			var inst = method.Body.Instructions;
+
+			var secondLang = inst.Line("::lang", inst.Line("::lang") + 1);
+
+			var count = inst.Count;
+			for (var index = secondLang; index < count; index++)
+			{
+				inst.RemoveAt(secondLang);
+			}
+
+			var first = inst.Line("::tGood");
+			for (var index = 0; index < first; index++)
+			{
+				inst.RemoveAt(0);
+			}
+
+			var newinst = method.Body.Instructions.Where(i => i.OpCode == OpCodes.Ldstr && !string.IsNullOrWhiteSpace(i.Operand?.ToString())).ToList();
+			var cnText = new Reader(@"..\TerrariaTextsInChinese\Texts\evilGood.json").GetTextItems();
+
+			for (var i = 0; i < newinst.Count; i++)
+			{
+				newinst[i].Operand = cnText.Single(t => t.Id == i).Content;
+			}
+		}
+
+		[ModApplyTo("*")]
+		public void ReplaceAngler()
+		{
+			Info("Angler..");
+			var method = SourceModuleDef.Find("Terraria.Lang", false).FindMethod("AnglerQuestChat");
+			var inst = method.Body.Instructions.Where(i => i.OpCode == OpCodes.Ldstr && !string.IsNullOrWhiteSpace(i.Operand?.ToString())).ToList();
+			var cnText = new Reader(@"..\TerrariaTextsInChinese\Texts\AnglerQuestChat.json").GetTextItems();
+
+			for (var i = 0; i < inst.Count; i++)
+			{
+				inst[i].Operand = cnText.Single(t => t.Id == i).Content;
+			}
 		}
 
 		private void InsertIfStatement(MethodDef method, string name, int elseIndex, bool isArg, params Type[] t)

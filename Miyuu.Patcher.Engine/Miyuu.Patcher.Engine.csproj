@@ -76,6 +76,10 @@
       <Project>{664a8d1e-1cdb-4f74-bde1-b64504e689e2}</Project>
       <Name>Miyuu.Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Miyuu.TextWrapper\Miyuu.TextWrapper.csproj">
+      <Project>{5f14bf80-0be1-4d86-b6a7-6d9af4a56138}</Project>
+      <Name>Miyuu.TextWrapper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
