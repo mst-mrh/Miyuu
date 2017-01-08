@@ -14,8 +14,8 @@ using Color = Microsoft.Xna.Framework.Color;
 
 namespace Miyuu.Cns
 {
-    public class CnsMain
-    {
+	public class CnsMain
+	{
 		public Game Current { get; }
 
 		internal FontFamily CnFont; // 内存分配
@@ -25,8 +25,8 @@ namespace Miyuu.Cns
 			Current = game;
 		}
 
-	    public void LoadFonts()
-	    {
+		public void LoadFonts()
+		{
 			const string fontFileName = "Font.tt*";
 
 			var collection = new PrivateFontCollection();

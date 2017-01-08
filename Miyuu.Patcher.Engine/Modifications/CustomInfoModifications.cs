@@ -40,16 +40,26 @@ namespace Miyuu.Patcher.Engine.Modifications
 			var tmpIndex = inst.IndexOf(inst.Single(i => i.OpCode == OpCodes.Brfalse && i.Operand == ins));
 			inst[tmpIndex] = OpCodes.Brfalse.ToInstruction(inserted); // 用于循环跳出
 
+			
+		}
+
+		[ModApplyTo("*")]
+		public void ModifyVersionNumber()
+		{
 			Info("修改版本信息..");
 			var type = SourceModuleDef.Find("Terraria.Main", false);
 			var versionNumberField = type.FindField("versionNumber");
-			method = type.FindMethod(".cctor");
-			inst = method.Body.Instructions;
+			var versionNumber2Field = type.FindField("versionNumber2");
+			var method = type.FindMethod(".cctor");
+			var inst = method.Body.Instructions;
 
 			for (var index = 0; index < inst.Count; index++)
 			{
-				ins = inst[index];
-				if (ins.OpCode == OpCodes.Ldstr && inst[index + 1].OpCode == OpCodes.Stsfld && inst[index + 1].Operand == versionNumberField)
+				var ins = inst[index];
+				if (ins.OpCode == OpCodes.Ldstr &&
+					inst[index + 1].OpCode == OpCodes.Stsfld &&
+					(inst[index + 1].Operand == versionNumberField ||
+					inst[index + 1].Operand == versionNumber2Field))
 				{
 					ins.Operand = "v1.3.4.4汉化版v3";
 				}

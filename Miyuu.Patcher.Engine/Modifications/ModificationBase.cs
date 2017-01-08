@@ -36,7 +36,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 					mat.AssemblyNames?.Length > 0 &&
 					(
 						mat.AssemblyNames.Contains(SourceModuleDef.Assembly.FullName) ||
-						mat.AssemblyNames.Contains("*"))
+						mat.AssemblyNames.Contains("*")) // 因为Run()被执行的前提是TargetAssemblys里有当前Name 所以可以直接走
 					)
 				{
 					kvps.Add(new KeyValuePair<int, MethodInfo>(m.GetCustomAttribute<ModOrderAttribute>()?.Order ?? 0, m));
