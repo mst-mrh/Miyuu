@@ -86,8 +86,13 @@ namespace Miyuu.Cns
 				var o3 = Main.fontMouseText.MeasureString(groupInfo);
 				o3.X *= 0.5f;
 				o3.Y *= 0.5f;
+#if !TML
 				Main.spriteBatch.DrawString(Main.fontMouseText, groupInfo,
 					new Vector2(o3.X + num107 + 10f, Main.screenHeight - o3.Y + num108 - 22f), c6, 0f, o3, 1f, SpriteEffects.None, 0f);
+#else
+				Main.spriteBatch.DrawString(Main.fontMouseText, groupInfo,
+					new Vector2(Main.screenWidth - o3.X + num108 - 10f, Main.screenHeight - o3.Y + num107 - 23f), c6, 0f, o3, 1f, SpriteEffects.None, 0f);
+#endif
 			}
 		}
 

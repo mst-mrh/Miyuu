@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.Localization;
 using Terraria.Map;
+#if TML
+using Terraria.ModLoader;
+#endif
 using Terraria.Social;
 
 namespace Miyuu.Cns
@@ -16625,8 +16628,13 @@ namespace Miyuu.Cns
 			for (var index = 0; index < Main.maxItemTypes; index++)
 				CnItemName[index] = ItemName(index); // 会引起商店不显示问题
 
+#if !TML
 			if (Lang.mapLegend == null)
 				Lang.mapLegend = new string[MapHelper.LookupCount()];
+#else
+			if(Lang.mapLegend == null)
+				Lang.mapLegend = new MapLegend(MapHelper.LookupCount());
+#endif
 
 			Lang.mapLegend[MapHelper.TileToLookup(4, 0)] = "火把";
 			Lang.mapLegend[MapHelper.TileToLookup(4, 1)] = "火把";
