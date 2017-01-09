@@ -300,7 +300,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 			}
 		}
 
-		[ModApplyTo(Tml)]
+		[ModApplyTo(Tml, TmlServer)]
 		public void TmodLoaderUi()
 		{
 			Info("正在替换TML界面信息..");
@@ -324,6 +324,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["r\t\tReload and return to world menu"] = "r\t\t重新加载后返回世界菜单",
 				["Type a number to switch between enabled/disabled"] = "输入数字以切换启用或禁用",
 				["Type a command: "] = "输入指令: ",
+				["Unloading mods..."] = "卸载模组中...",
 			};
 			InvokeReplace("Interface", items);
 
@@ -496,7 +497,67 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Download"] = "下载"
 			};
 			InvokeReplace("UIUpdateMessage", items);
+
+			items = new Dictionary<string, string>
+			{
+				["The game has crashed!"] = "本游戏崩溃了!",
+				["Adding mod content..."] = "增加模组内容...",
+			};
+			InvokeReplace("ModLoader", items);
 		}
+
+		[ModApplyTo(TerrariaServer, TmlServer)]
+		public void ServerLang()
+		{
+			Info("修改服务器标题..");
+			var method = SourceModuleDef.Find("Terraria.Main", false).FindMethod("DedServ");
+
+			var target =
+				method.Body.Instructions.Single(
+					i =>
+							i.OpCode.Equals(OpCodes.Ldstr) && string.Equals(i.Operand.ToString(), "Terraria Server ", StringComparison.Ordinal));
+			target.Operand = "Terraria 服务器 ";
+
+			foreach (var t in method.Body.Instructions.Where(i =>
+							 i.OpCode.Equals(OpCodes.Ldstr) && string.Equals(i.Operand.ToString(), " - ", StringComparison.Ordinal)))
+			{
+				t.Operand = " (抗药又坚硬汉化组) - ";
+			}
+
+			target =
+				method.Body.Instructions.Single(
+					i =>
+							i.OpCode.Equals(OpCodes.Ldstr) && string.Equals(i.Operand.ToString(), "Running one update...", StringComparison.Ordinal));
+			target.Operand = "执行更新..";
+
+			target =
+				method.Body.Instructions.Single(
+					i =>
+							i.OpCode.Equals(OpCodes.Ldstr) && string.Equals(i.Operand.ToString(), "m\t\tMods Menu", StringComparison.Ordinal));
+			target.Operand = "m\t\t模组菜单";
+
+			method = SourceModuleDef.Find("Terraria.Program", false).FindMethod("LaunchGame");
+
+			target =
+				method.Body.Instructions.Single(
+					i =>
+							i.OpCode.Equals(OpCodes.Ldstr) && string.Equals(i.Operand.ToString(), "English", StringComparison.Ordinal));
+			target.Operand = "Chinese";
+
+			Info("修改服务器语言..");
+			method = SourceModuleDef.Find("Terraria.Lang", false).FindMethod("setLang");
+			var field = SourceModuleDef.Find("Terraria.Lang", false).FindField("lang");
+			target =
+				method.Body.Instructions.First(i => i.OpCode.Equals(OpCodes.Call));
+			var index = method.Body.Instructions.IndexOf(target);
+
+			method.Body.Instructions.Insert(index,
+				new { OpCodes.Ldc_I4_2 },
+				new { OpCodes.Stsfld, Operand = (IField) field }
+			);
+		}
+
+		#region replaces
 
 		private void InsertIfStatement(MethodDef method, string name, int elseIndex, bool isArg, params Type[] t)
 		{
@@ -556,6 +617,8 @@ namespace Miyuu.Patcher.Engine.Modifications
 				ins.Operand = newString;
 			}
 		}
+
+		#endregion
 
 		public ChineseTextModifications() : base("导入中文文本") { }
 
