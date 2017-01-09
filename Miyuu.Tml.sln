@@ -9,9 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miyuu.Extensions", "Miyuu.E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miyuu.Patcher", "Miyuu.Patcher\Miyuu.Patcher.csproj", "{3F06346A-84F7-4017-9569-10671E248635}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miyuu.Cns", "Miyuu.Cns\Miyuu.TmlCns.csproj", "{665075FA-4A0E-4B05-9C16-4E10D76DA95B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miyuu.TmlCns", "Miyuu.Cns\Miyuu.TmlCns.csproj", "{665075FA-4A0E-4B05-9C16-4E10D76DA95B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miyuu.TextWrapper", "Miyuu.TextWrapper\Miyuu.TextWrapper.csproj", "{5F14BF80-0BE1-4D86-B6A7-6D9AF4A56138}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miyuu.ModCompatizer", "Miyuu.ModCompatizer\Miyuu.ModCompatizer.csproj", "{F1A6FF33-8315-49CE-A14C-86E2946EA786}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{5F14BF80-0BE1-4D86-B6A7-6D9AF4A56138}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F14BF80-0BE1-4D86-B6A7-6D9AF4A56138}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F14BF80-0BE1-4D86-B6A7-6D9AF4A56138}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1A6FF33-8315-49CE-A14C-86E2946EA786}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1A6FF33-8315-49CE-A14C-86E2946EA786}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1A6FF33-8315-49CE-A14C-86E2946EA786}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1A6FF33-8315-49CE-A14C-86E2946EA786}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
