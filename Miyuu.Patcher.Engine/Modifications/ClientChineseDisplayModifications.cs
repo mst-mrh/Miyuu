@@ -13,9 +13,10 @@ namespace Miyuu.Patcher.Engine.Modifications
 	internal class ClientChineseDisplayModifications : ModificationBase
 	{
 		public const string Terraria = "Terraria, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
+		public const string Tml = "tModLoader, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
 		public const string Otapi = "OTAPI, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
 
-		[ModApplyTo(Terraria)]
+		[ModApplyTo(Terraria, Tml)]
 		public void AddCnsField()
 		{
 			var main = SourceModuleDef.Find("Terraria.Main", true);
@@ -34,7 +35,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 			);
 		}
 
-		[ModApplyTo(Terraria), ModOrder(10)]
+		[ModApplyTo(Terraria, Tml), ModOrder(10)]
 		public void ReplaceFontLoad()
 		{
 			var main = SourceModuleDef.Find("Terraria.Main", true);
@@ -52,7 +53,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 			);
 		}
 
-		[ModApplyTo(Terraria), ModOrder(11)]
+		[ModApplyTo(Terraria, Tml), ModOrder(11)]
 		public void ReplaceDeclarations()
 		{
 			var main = SourceModuleDef.Find("Terraria.Main", true);
@@ -71,7 +72,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 			Info($"声明类型替换: {_declCount}");
 		}
 
-		[ModApplyTo(Terraria, Otapi), ModOrder(12)]
+		[ModApplyTo("*"), ModOrder(12)]
 		public void ReplaceDsCall()
 		{
 			const string ds = "DrawString";
@@ -232,7 +233,8 @@ namespace Miyuu.Patcher.Engine.Modifications
 		public override IEnumerable<string> TargetAssemblys => new[]
 		{
 			Terraria,
-			Otapi
+			Otapi,
+			Tml
 		};
 	}
 }
