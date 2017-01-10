@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
 using Miyuu.Cns;
@@ -175,11 +173,11 @@ namespace Miyuu.Patcher.Engine.Modifications
 				new { OpCodes.Call, Operand = Importer.Import(typeof(ChineseTexts), "Dialog") },
 				new { OpCodes.Ret }
 			);
-			
+
 			Info("DyeTrader!!");
 			method = SourceModuleDef.Find("Terraria.Lang", false).FindMethod("DyeTraderQuestChat");
 			InsertIfStatement(method, "DyeTraderQuestChat", 0, true, typeof(bool));
-			
+
 			Info("Birthday!!");
 			method = SourceModuleDef.Find("Terraria.Lang", false).FindMethod("GetBirthdayDialog");
 			InsertIfStatement(method, "GetBirthdayDialog", 3, false, typeof(int));
@@ -553,7 +551,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 
 			method.Body.Instructions.Insert(index,
 				new { OpCodes.Ldc_I4_2 },
-				new { OpCodes.Stsfld, Operand = (IField) field }
+				new { OpCodes.Stsfld, Operand = (IField)field }
 			);
 		}
 
@@ -567,7 +565,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 			var tmp = isArg ? OpCodes.Ldarg_0 : OpCodes.Ldloc_0;
 
 			inst.Insert(elseIndex,
-				new { OpCodes.Ldsfld, Operand = (IField) SourceModuleDef.Find("Terraria.Lang", false).FindField("lang") },
+				new { OpCodes.Ldsfld, Operand = (IField)SourceModuleDef.Find("Terraria.Lang", false).FindField("lang") },
 				new { OpCodes.Ldc_I4_2 },
 				new { OpCodes.Bne_Un_S, Operand = target },
 				new { tmp },

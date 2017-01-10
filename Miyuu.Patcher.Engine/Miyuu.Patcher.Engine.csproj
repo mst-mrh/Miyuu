@@ -58,6 +58,7 @@
     <Compile Include="Modifications\ChineseTextModifications.cs" />
     <Compile Include="Modifications\ClientChineseDisplayModifications.cs" />
     <Compile Include="ModApplyToAttribute.cs" />
+    <Compile Include="Modifications\CnsLibModifications.cs" />
     <Compile Include="Modifications\CustomInfoModifications.cs" />
     <Compile Include="Modifications\ModificationBase.cs" />
     <Compile Include="ModOrderAttribute.cs" />

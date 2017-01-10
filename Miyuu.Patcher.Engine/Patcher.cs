@@ -3,14 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
-using Miyuu.Cns;
-using Miyuu.Extensions;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Miyuu.Patcher.Engine.Modifications;
 
 namespace Miyuu.Patcher.Engine
@@ -100,7 +94,7 @@ namespace Miyuu.Patcher.Engine
 			{
 				Write();
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Console.WriteLine("保存失败!{0}\t{1}", Environment.NewLine, ex);
 
@@ -117,7 +111,7 @@ namespace Miyuu.Patcher.Engine
 			IsTml = true;
 
 			if (_module.Find("Terraria.Program", false).FindMethod("LaunchGame")?.Body.Instructions.Any(
-				         i => i.OpCode.Equals(OpCodes.Callvirt) && i.Operand.ToString().EndsWith("Main::DedServ()")) == true)
+						 i => i.OpCode.Equals(OpCodes.Callvirt) && i.Operand.ToString().EndsWith("Main::DedServ()")) == true)
 			{
 				IsTmlServer = true;
 				_module.Assembly.Name = "tModLoaderServer";
