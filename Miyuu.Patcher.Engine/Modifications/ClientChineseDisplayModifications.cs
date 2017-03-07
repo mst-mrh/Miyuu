@@ -13,7 +13,6 @@ namespace Miyuu.Patcher.Engine.Modifications
 	{
 		public const string Terraria = "Terraria, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
 		public const string Tml = "tModLoader, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
-		public const string Otapi = "OTAPI, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
 
 		[ModApplyTo(Terraria, Tml)]
 		public void AddCnsField()
@@ -232,7 +231,6 @@ namespace Miyuu.Patcher.Engine.Modifications
 		public override IEnumerable<string> TargetAssemblys => new[]
 		{
 			Terraria,
-			Otapi,
 			Tml
 		};
 	}

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !OTAPI
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
@@ -9,11 +10,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Color = Microsoft.Xna.Framework.Color;
+#endif
 
 namespace Miyuu.Cns
 {
 	public class CnsMain
 	{
+#if !OTAPI
 		public Game Current { get; }
 
 		internal FontFamily CnFont; // 内存分配
@@ -94,5 +97,6 @@ namespace Miyuu.Cns
 			}
 		}
 
+#endif
 	}
 }

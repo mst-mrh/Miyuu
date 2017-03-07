@@ -18,7 +18,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 		public const string Tml = "tModLoader, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
 		public const string TmlServer = "tModLoaderServer, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
 
-		[ModApplyTo(Terraria, Tml, Otapi)]
+		[ModApplyTo(Terraria, Tml)]
 		public void AddGroupInfoDraw()
 		{
 			Info("加入汉化组信息..");

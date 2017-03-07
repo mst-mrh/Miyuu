@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !OTAPI
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -9,11 +10,13 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Color = Microsoft.Xna.Framework.Color;
 using Terraria;
+#endif
 
 namespace Miyuu.Cns
 {
 	public class SpriteFontCn
 	{
+#if !OTAPI
 		private static object Locker = new object();
 
 		private Dictionary<char, CharTile> _charTiles = new Dictionary<char, CharTile>();
@@ -246,5 +249,6 @@ namespace Miyuu.Cns
 				return texture2D;
 			}
 		}
+#endif
 	}
 }

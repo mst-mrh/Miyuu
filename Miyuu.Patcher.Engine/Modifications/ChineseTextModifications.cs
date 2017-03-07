@@ -28,8 +28,8 @@ namespace Miyuu.Patcher.Engine.Modifications
 			inst[line].Operand = "Chinese";
 
 			Info("加入外置语言包..");
-			SourceModuleDef.Resources.Add(new EmbeddedResource("Terraria.Localization.Content.Chinese.json", File.ReadAllBytes(@"C:\Users\zitwa\Source\News\TerrariaTextsInChinese\Texts\Terraria.Localization.Content.Chinese.json"), ManifestResourceAttributes.Public));
-			SourceModuleDef.Resources.Add(new EmbeddedResource("Terraria.Localization.Content.Chinese.Town.json", File.ReadAllBytes(@"C:\Users\zitwa\Source\News\TerrariaTextsInChinese\Texts\Terraria.Localization.Content.Chinese.Town.json"), ManifestResourceAttributes.Public));
+			SourceModuleDef.Resources.Add(new EmbeddedResource("Terraria.Localization.Content.Chinese.json", File.ReadAllBytes(@"..\TerrariaTextsInChinese\Texts\Terraria.Localization.Content.Chinese.json"), ManifestResourceAttributes.Public));
+			SourceModuleDef.Resources.Add(new EmbeddedResource("Terraria.Localization.Content.Chinese.Town.json", File.ReadAllBytes(@"..\TerrariaTextsInChinese\Texts\Terraria.Localization.Content.Chinese.Town.json"), ManifestResourceAttributes.Public));
 		}
 
 		[ModApplyTo(Terraria, Tml), ModOrder]
@@ -504,7 +504,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 			InvokeReplace("ModLoader", items);
 		}
 
-		[ModApplyTo(TerrariaServer, TmlServer)]
+		[ModApplyTo(TerrariaServer, TmlServer, Otapi)]
 		public void ServerLang()
 		{
 			Info("修改服务器标题..");
@@ -521,18 +521,6 @@ namespace Miyuu.Patcher.Engine.Modifications
 			{
 				t.Operand = " (抗药又坚硬汉化组) - ";
 			}
-
-			target =
-				method.Body.Instructions.Single(
-					i =>
-							i.OpCode.Equals(OpCodes.Ldstr) && string.Equals(i.Operand.ToString(), "Running one update...", StringComparison.Ordinal));
-			target.Operand = "执行更新..";
-
-			target =
-				method.Body.Instructions.Single(
-					i =>
-							i.OpCode.Equals(OpCodes.Ldstr) && string.Equals(i.Operand.ToString(), "m\t\tMods Menu", StringComparison.Ordinal));
-			target.Operand = "m\t\t模组菜单";
 
 			method = SourceModuleDef.Find("Terraria.Program", false).FindMethod("LaunchGame");
 
@@ -555,7 +543,25 @@ namespace Miyuu.Patcher.Engine.Modifications
 			);
 		}
 
-		#region replaces
+		[ModApplyTo(TmlServer), ModOrder(100)]
+		public void TmlServerHardCodedString()
+		{
+			var method = SourceModuleDef.Find("Terraria.Main", false).FindMethod("DedServ");
+
+			var target =
+				method.Body.Instructions.Single(
+					i =>
+							i.OpCode.Equals(OpCodes.Ldstr) && string.Equals(i.Operand.ToString(), "Running one update...", StringComparison.Ordinal));
+			target.Operand = "执行更新..";
+
+			target =
+				method.Body.Instructions.Single(
+					i =>
+							i.OpCode.Equals(OpCodes.Ldstr) && string.Equals(i.Operand.ToString(), "m\t\tMods Menu", StringComparison.Ordinal));
+			target.Operand = "m\t\t模组菜单";
+		}
+
+#region replaces
 
 		private void InsertIfStatement(MethodDef method, string name, int elseIndex, bool isArg, params Type[] t)
 		{
@@ -616,7 +622,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 			}
 		}
 
-		#endregion
+#endregion
 
 		public ChineseTextModifications() : base("导入中文文本") { }
 
