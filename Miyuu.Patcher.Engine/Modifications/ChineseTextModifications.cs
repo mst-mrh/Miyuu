@@ -561,6 +561,24 @@ namespace Miyuu.Patcher.Engine.Modifications
 			target.Operand = "m\t\t模组菜单";
 		}
 
+		[ModApplyTo("*")]
+		public void NetDefaultsCnToEn()
+		{
+			var method = SourceModuleDef.Find("Terraria.Main", false).FindMethod("InitializeDirect");
+			var itemName = SourceModuleDef.Find("Terraria.Lang", false).FindMethod("itemName");
+
+			var inst = method.Body.Instructions;
+
+			var target = inst.Single(x => x.OpCode.Equals(OpCodes.Ldfld) && (x.Operand as IField)?.Name == "name");
+			var line = inst.IndexOf(target);
+
+			inst[line - 1] = inst[line - 2].Clone();
+
+			inst[line] = Instruction.Create(OpCodes.Call, itemName);
+
+			inst.Insert(line, OpCodes.Ldc_I4_1.ToInstruction());
+		}
+
 #region replaces
 
 		private void InsertIfStatement(MethodDef method, string name, int elseIndex, bool isArg, params Type[] t)
