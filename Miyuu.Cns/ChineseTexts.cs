@@ -218,7 +218,7 @@ namespace Miyuu.Cns
 				}
 				else if (other == 254)
 				{
-					result = "";
+					result = "异常死亡了。";
 				}
 				else if (other == 255)
 				{
@@ -4141,7 +4141,7 @@ namespace Miyuu.Cns
 				case 1162:
 					return "绿叶翅膀";
 				case 1163:
-					return "沙暴气球";
+					return "暴雪气球";
 				case 1164:
 					return "气球束";
 				case 1165:
@@ -10961,11 +10961,11 @@ namespace Miyuu.Cns
 				case 149:
 					return "'上面写满了神秘的符号'";
 				case 151:
-					return "增加4%远程伤害";
+					return "增加5%远程伤害";
 				case 152:
-					return "增加4%远程伤害";
+					return "增加5%远程伤害";
 				case 153:
-					return "增加4%远程伤害";
+					return "增加5%远程伤害";
 				case 156:
 					return "使你免疫击退";
 				case 157:
@@ -11013,7 +11013,7 @@ namespace Miyuu.Cns
 				case 227:
 					return "减少药水冷却时间";
 				case 228:
-					return "增加20点魔法上限";
+					return "增加40点魔法上限";
 				case 229:
 					return "增加20点魔法上限";
 				case 230:
@@ -11473,9 +11473,9 @@ namespace Miyuu.Cns
 				case 958:
 					return "增加7%近战速度";
 				case 959:
-					return "增加4%远程伤害.";
+					return "增加5%远程伤害.";
 				case 960:
-					return "增加20点魔法上限";
+					return "增加40点魔法上限";
 				case 961:
 					return "增加20点魔法上限";
 				case 962:
@@ -11705,7 +11705,7 @@ namespace Miyuu.Cns
 				case 1252:
 					return "赋予持有者二段跳的能力";
 				case 1253:
-					return "生命值低于25%时召唤一个能阻挡伤害的护盾";
+					return "生命值低于50%时召唤一个能阻挡伤害的护盾";
 				case 1254:
 					return "射出强大而且高速的子弹";
 				case 1255:
@@ -13836,7 +13836,7 @@ namespace Miyuu.Cns
 				case 929:
 					return "塞进大炮里，注意轻拿轻放";
 				case 936:
-					return "增加10%所有伤害和近战速度";
+					return "增加12%所有伤害和近战速度";
 				case 938:
 					return "只会在生命高于25%时生效";
 				case 950:
