@@ -14,25 +14,6 @@ namespace Miyuu.Patcher.Engine.Modifications
 		public const string Terraria = "Terraria, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
 		public const string Tml = "tModLoader, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
 
-		[ModApplyTo(Terraria, Tml)]
-		public void AddCnsField()
-		{
-			var main = SourceModuleDef.Find("Terraria.Main", true);
-			var field = new FieldDefUser("Cns", new FieldSig(Importer.ImportAsTypeSig(typeof(CnsMain))));
-
-			main.Fields.Add(field);
-
-			var method = main.FindMethod(".ctor");
-			var inst = method.Body.Instructions;
-
-			inst.Insert(0,
-				new { OpCodes.Ldarg_0 },
-				new { OpCodes.Ldarg_0 },
-				new { OpCodes.Newobj, Operand = Importer.Import(typeof(CnsMain).GetConstructor(new[] { typeof(Game) })) },
-				new { OpCodes.Stfld, Operand = (IField)field }
-			);
-		}
-
 		[ModApplyTo(Terraria, Tml), ModOrder(10)]
 		public void ReplaceFontLoad()
 		{

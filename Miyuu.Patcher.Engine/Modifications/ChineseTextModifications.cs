@@ -561,7 +561,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 			target.Operand = "m\t\t模组菜单";
 		}
 
-		[ModApplyTo("*")]
+		[ModApplyTo(Otapi)]
 		public void NetDefaultsCnToEn()
 		{
 			var method = SourceModuleDef.Find("Terraria.Main", false).FindMethod("InitializeDirect");

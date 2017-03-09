@@ -1,10 +1,10 @@
 ﻿#if !OTAPI
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,13 +17,57 @@ namespace Miyuu.Cns
 	public class CnsMain
 	{
 #if !OTAPI
-		public Game Current { get; }
+		private readonly Game _instance;
 
-		internal FontFamily CnFont; // 内存分配
+		private FontFamily _cnFont; // 内存分配
+
+		private IntPtr _gXaudioDll;
+
+		private IntPtr _pXAudio2;
+
+		private static bool _userInput;
 
 		public CnsMain(Game game)
 		{
-			Current = game;
+			_instance = game;
+
+			try
+			{
+				InitializeXAudio();
+				_instance.Exiting += OnExiting;
+			}
+			catch
+			{
+				// ignored
+			}
+		}
+
+		private void OnExiting(object sender, EventArgs eventArgs)
+		{
+			if (_pXAudio2 != IntPtr.Zero)
+			{
+				// release
+			}
+
+			if (_gXaudioDll != IntPtr.Zero)
+			{
+				FreeLibrary(_gXaudioDll);
+				_gXaudioDll = IntPtr.Zero;
+			}
+		}
+
+		private unsafe void InitializeXAudio()
+		{
+			_gXaudioDll = LoadLibraryEx("XAudio2_6.DLL", IntPtr.Zero, LoadLibrarySearchSystem32);
+
+			var xAudio2Out = IntPtr.Zero;
+			XAudio2Create_(&xAudio2Out, 0, DefaultProcessor);
+			_pXAudio2 = xAudio2Out;
+		}
+
+		public void Initialize()
+		{
+			ClaymanInputCaputure.Initialize(_instance.Window);
 		}
 
 		public void LoadFonts()
@@ -45,18 +89,18 @@ namespace Miyuu.Cns
 			var fontName = collection.Families.First().Name;
 			var font = new FontFamily(fontName, collection);
 
-			CnFont = font;
+			_cnFont = font;
 
 			if (Main.fontCombatText == null)
 			{
 				Main.fontCombatText = new SpriteFontCn[2];
 			}
 
-			Main.fontMouseText = new SpriteFontCn(new Font(CnFont, 17.55F, GraphicsUnit.Pixel));
-			Main.fontItemStack = new SpriteFontCn(new Font(CnFont, 16.2F, GraphicsUnit.Pixel));
-			Main.fontDeathText = new SpriteFontCn(new Font(CnFont, 33.75F, GraphicsUnit.Pixel));
-			Main.fontCombatText[1] = new SpriteFontCn(new Font(CnFont, 20.25F, GraphicsUnit.Pixel));
-			Main.fontCombatText[0] = new SpriteFontCn(new Font(CnFont, 17.55F, GraphicsUnit.Pixel));
+			Main.fontMouseText = new SpriteFontCn(new Font(_cnFont, 17.55F, GraphicsUnit.Pixel));
+			Main.fontItemStack = new SpriteFontCn(new Font(_cnFont, 16.2F, GraphicsUnit.Pixel));
+			Main.fontDeathText = new SpriteFontCn(new Font(_cnFont, 33.75F, GraphicsUnit.Pixel));
+			Main.fontCombatText[1] = new SpriteFontCn(new Font(_cnFont, 20.25F, GraphicsUnit.Pixel));
+			Main.fontCombatText[0] = new SpriteFontCn(new Font(_cnFont, 17.55F, GraphicsUnit.Pixel));
 		}
 
 		public static void DrawGroupInfo(Color color)
@@ -97,6 +141,32 @@ namespace Miyuu.Cns
 			}
 		}
 
+		public static void Update()
+		{
+			_userInput = Main.drawingPlayerChat || Main.editSign || Main.editChest || Main.gameMenu && Main.menuMode == 888;
+			if (_userInput && !Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
+			{
+				if (!ClaymanInputCaputure.Enabled)
+					ClaymanInputCaputure.OpenImm();
+			}
+			else if (ClaymanInputCaputure.Enabled)
+			{
+				ClaymanInputCaputure.CloseImm();
+			}
+		}
+
+		[DllImport("kernel32.dll", SetLastError = true)]
+		private static extern IntPtr LoadLibraryEx(string dllToLoad, IntPtr hFile, uint flags);
+
+		[DllImport("kernel32", SetLastError = true)]
+		private static extern bool FreeLibrary(IntPtr hModule);
+
+		[DllImport("xaudio2_8.dll", EntryPoint = "XAudio2Create", CallingConvention = CallingConvention.StdCall)]
+		private static extern unsafe int XAudio2Create_(void* arg0, int arg1, int arg2);
+
+		private const uint LoadLibrarySearchSystem32 = 0x00000800;
+
+		private const int DefaultProcessor = 0x00000001;
 #endif
 	}
 }

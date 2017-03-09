@@ -66,7 +66,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 					(inst[index + 1].Operand == versionNumberField ||
 					inst[index + 1].Operand == versionNumber2Field))
 				{
-					ins.Operand = "v1.3.4.4汉化版v3";
+					ins.Operand = "v1.3.4.4汉化版v4";
 				}
 			}
 		}
