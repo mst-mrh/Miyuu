@@ -14,7 +14,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 		public const string Tml = "tModLoader, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
 
 		[ModApplyTo("*")]
-		public void InsertPostInitCall()
+		public void InsertPreInitCall()
 		{
 			var main = SourceModuleDef.Find("Terraria.Main", false);
 			var method = main.FindMethod("Initialize");

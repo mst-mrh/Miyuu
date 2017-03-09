@@ -44,6 +44,21 @@ namespace Miyuu.Patcher.Engine.Modifications
 			);
 		}
 
+		[ModApplyTo(Terraria, Tml)]
+		public void InsertPostInitCall()
+		{
+			var main = SourceModuleDef.Find("Terraria.Main", false);
+			var method = main.FindMethod("Initialize");
+
+			var inst = method.Body.Instructions;
+
+			inst.Insert(inst.Count - 1,
+				new { OpCodes.Ldarg_0 },
+				new { OpCodes.Ldfld, Operand = (IField)main.FindField("Cns") },
+				new { OpCodes.Call, Operand = Importer.Import(typeof(CnsMain), "PostInitialize") }
+			);
+		}
+
 		public CnsLibModifications() : base("中文库支持") { }
 
 		public override IEnumerable<string> TargetAssemblys => new[]

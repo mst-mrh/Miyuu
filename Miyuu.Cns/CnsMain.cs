@@ -70,6 +70,12 @@ namespace Miyuu.Cns
 			ClaymanInputCaputure.Initialize(_instance.Window);
 		}
 
+		public void PostInitialize()
+		{
+			Lang.lang = 2;
+			Lang.setLang();
+		}
+
 		public void LoadFonts()
 		{
 			const string fontFileName = "Font.tt*";
