@@ -1,4 +1,4 @@
-﻿#if !OTAPI
+﻿#if !SERVER
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -16,7 +16,7 @@ namespace Miyuu.Cns
 {
 	public class SpriteFontCn
 	{
-#if !OTAPI
+#if !SERVER
 		private static object Locker = new object();
 
 		private Dictionary<char, CharTile> _charTiles = new Dictionary<char, CharTile>();

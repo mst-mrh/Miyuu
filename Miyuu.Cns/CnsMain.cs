@@ -1,4 +1,4 @@
-﻿#if !OTAPI
+﻿#if !SERVER
 using System;
 using System.Drawing;
 using System.Drawing.Text;
@@ -16,7 +16,7 @@ namespace Miyuu.Cns
 {
 	public class CnsMain
 	{
-#if !OTAPI
+#if !SERVER
 		private readonly Game _instance;
 
 		private FontFamily _cnFont; // 内存分配

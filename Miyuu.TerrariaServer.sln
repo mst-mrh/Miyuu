@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miyuu.Patcher.Engine", "Miyuu.Patcher.Engine\Miyuu.Patcher.Engine.csproj", "{3EAB1B6F-7BF3-41E7-A4C4-51419A6BE7D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miyuu.Extensions", "Miyuu.Extensions\Miyuu.Extensions.csproj", "{664A8D1E-1CDB-4F74-BDE1-B64504E689E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miyuu.Patcher", "Miyuu.Patcher\Miyuu.Patcher.csproj", "{3F06346A-84F7-4017-9569-10671E248635}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miyuu.Cns", "Miyuu.Cns\Miyuu.Cns.TerrariaServer.csproj", "{665075FA-4A0E-4B05-9C16-4E10D76DA95B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miyuu.TextWrapper", "Miyuu.TextWrapper\Miyuu.TextWrapper.csproj", "{5F14BF80-0BE1-4D86-B6A7-6D9AF4A56138}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3EAB1B6F-7BF3-41E7-A4C4-51419A6BE7D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EAB1B6F-7BF3-41E7-A4C4-51419A6BE7D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EAB1B6F-7BF3-41E7-A4C4-51419A6BE7D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EAB1B6F-7BF3-41E7-A4C4-51419A6BE7D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{664A8D1E-1CDB-4F74-BDE1-B64504E689E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{664A8D1E-1CDB-4F74-BDE1-B64504E689E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{664A8D1E-1CDB-4F74-BDE1-B64504E689E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{664A8D1E-1CDB-4F74-BDE1-B64504E689E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F06346A-84F7-4017-9569-10671E248635}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F06346A-84F7-4017-9569-10671E248635}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F06346A-84F7-4017-9569-10671E248635}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F06346A-84F7-4017-9569-10671E248635}.Release|Any CPU.Build.0 = Release|Any CPU
+		{665075FA-4A0E-4B05-9C16-4E10D76DA95B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{665075FA-4A0E-4B05-9C16-4E10D76DA95B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{665075FA-4A0E-4B05-9C16-4E10D76DA95B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{665075FA-4A0E-4B05-9C16-4E10D76DA95B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F14BF80-0BE1-4D86-B6A7-6D9AF4A56138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F14BF80-0BE1-4D86-B6A7-6D9AF4A56138}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F14BF80-0BE1-4D86-B6A7-6D9AF4A56138}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F14BF80-0BE1-4D86-B6A7-6D9AF4A56138}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

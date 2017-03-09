@@ -1,13 +1,16 @@
-﻿using System;
+﻿#if !SERVER
+using System;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Xna.Framework;
+#endif
 // ReSharper disable InconsistentNaming
 
 namespace Miyuu.Cns
 {
 	public static class ClaymanInputCaputure
 	{
+#if !SERVER
 		private static bool _initialized;
 
 		private static IntPtr _windowHandle;
@@ -119,5 +122,6 @@ namespace Miyuu.Cns
 			public const int ImeKeyUp = 0x0291;
 			public const int InputLanguageChange = 0x0051;
 		}
+#endif
 	}
 }
