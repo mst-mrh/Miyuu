@@ -314,6 +314,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Only Download Signed Mods From Servers: Off"] = "只从服务器上下载经签名的模组: 关闭",
 				["Experimental Features: On"] = "实验特性: 开启",
 				["Experimental Features: Off"] = "实验特性: 关闭",
+				["Clear Mod Browser Credentials"] = "清空模组浏览器证书",
 				["Terraria Server "] = "Terraria 服务器 ",
 				["enabled"] = "开启",
 				["disabled"] = "关闭",
@@ -379,7 +380,9 @@ namespace Miyuu.Patcher.Engine.Modifications
 			items = new Dictionary<string, string>
 			{
 				["Mod Browser"] = "模组浏览器",
-				["Reload List"] = "重新加载列表",
+				["Reload Mods"] = "重新加载列表",
+				["Reloading..."] = "加载中...",
+				["Loading..."] = "加载中...",
 				["Back"] = "返回",
 				["Type to search"] = "键入以搜索",
 				["You have updated a mod. Remember to reload mods for it to take effect."] = "你已经更新了模组. \n记得运行中文兼容处理程序后重新加载来使其生效.",
@@ -388,7 +391,10 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Mod Browser OFFLINE (404)"] = "模组浏览器离线. (404)",
 				["Mod Browser OFFLINE.."] = "模组浏览器离线..",
 				["Mod Browser OFFLINE (Unknown)"] = "模组浏览器离线. (未知)",
-				["Mod Browser OFFLINE."] = "模组浏览器离线."
+				["Mod Browser OFFLINE."] = "模组浏览器离线.",
+				["Clear Special Filter: "] = "",
+				["Clear Special Filter: ??"] = "",
+				["None"] = "",
 			};
 			InvokeReplace("UIModBrowser", items);
 
@@ -502,6 +508,35 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Adding mod content..."] = "增加模组内容...",
 			};
 			InvokeReplace("ModLoader", items);
+
+			items = new Dictionary<string, string>
+			{
+				["Sort mod names alphabetically"] = "按模组名字母顺序",
+				["Sort mod names reverse-alphabetically"] = "按模组名字母倒序",
+				["Sort by downloads descending"] = "下载量从大到小",
+				["Sort by downloads ascending"] = "下载量从小到大",
+				["Sort by recently updated"] = "近期更新",
+				["Sort by popularity"] = "按模组人气排序",
+				["Unknown Sort"] = "未知"
+			};
+			InvokeReplace("SortModesExtensions", items);
+
+			items = new Dictionary<string, string>
+			{
+				["Search by Mod name"] = "搜索模组名",
+				["Search by Author name"] = "搜索作者名",
+				["Unknown Sort"] = "未知"
+			};
+			InvokeReplace("SearchFilterModesExtensions", items);
+
+			items = new Dictionary<string, string>
+			{
+				["Show all mods"] = "显示所有模组",
+				["Show mods not installed and updates"] = "显示未安装和有更新的模组",
+				["Show only updates"] = "显示有更新的模组",
+				["Unknown Sort"] = "未知"
+			};
+			InvokeReplace("UpdateFilterModesExtensions", items);
 		}
 
 		[ModApplyTo(TerrariaServer, TmlServer, Otapi)]
