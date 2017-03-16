@@ -16628,7 +16628,7 @@ namespace Miyuu.Cns
 			for (var index = 0; index < Main.maxItemTypes; index++)
 				CnItemName[index] = ItemName(index); // 会引起商店不显示问题
 
-			if (Main.netMode == 2)
+			if (Program.IsServer)
 				return;
 #if !TML
 			if (Lang.mapLegend == null)

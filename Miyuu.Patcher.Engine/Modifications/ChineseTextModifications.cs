@@ -594,6 +594,26 @@ namespace Miyuu.Patcher.Engine.Modifications
 					i =>
 							i.OpCode.Equals(OpCodes.Ldstr) && string.Equals(i.Operand.ToString(), "m\t\tMods Menu", StringComparison.Ordinal));
 			target.Operand = "m\t\t模组菜单";
+
+			target =
+				method.Body.Instructions.Single(
+					i =>
+							i.OpCode.Equals(OpCodes.Ldstr) && string.Equals(i.Operand.ToString(), "b\t\tMod Browser", StringComparison.Ordinal));
+			target.Operand = "b\t\t模组浏览器";
+
+			method = SourceModuleDef.Find("Terraria.ModLoader.Interface", false).FindMethod("ServerModBrowserMenu");
+
+			target =
+				method.Body.Instructions.Single(
+					i =>
+							i.OpCode.Equals(OpCodes.Ldstr) && string.Equals(i.Operand.ToString(), "b\t\tReturn to world menu", StringComparison.Ordinal));
+			target.Operand = "b\t\t返回到世界选择界面";
+
+			target =
+				method.Body.Instructions.Single(
+					i =>
+							i.OpCode.Equals(OpCodes.Ldstr) && string.Equals(i.Operand.ToString(), "Type an exact ModName to download: ", StringComparison.Ordinal));
+			target.Operand = "输入模组名以下载: ";
 		}
 
 		[ModApplyTo(Otapi)]
