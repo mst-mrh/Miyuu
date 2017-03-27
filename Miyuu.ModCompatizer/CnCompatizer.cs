@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Miyuu.Cns;
 using Miyuu.Extensions;
-using Terraria;
 
 namespace Miyuu.ModCompatizer
 {
@@ -86,15 +81,17 @@ namespace Miyuu.ModCompatizer
 						if (i.OpCode.Equals(OpCodes.Ldsfld) &&
 							i.Operand?.ToString().StartsWith("Microsoft.Xna.Framework.Graphics.SpriteFont") == true)
 						{
-							(i.Operand as MemberRef).FieldSig.Type = _importer.ImportAsTypeSig(typeof(SpriteFontCn));
+							var member = i.Operand as MemberRef;
+							if(member != null)
+								member.FieldSig.Type = _importer.ImportAsTypeSig(typeof(SpriteFontCn));
 						}
 
 						// ReSharper disable once InvertIf
 						if (i.OpCode.Equals(OpCodes.Call))
 						{
-							if (i.Operand is IMethodDefOrRef)
+							var method = i.Operand as IMethodDefOrRef;
+							if (method != null)
 							{
-								var method = (IMethodDefOrRef) i.Operand;
 								for (var i1 = 0; i1 < method.MethodSig.Params.Count; i1++)
 								{
 									var type = method.MethodSig.Params[i1];

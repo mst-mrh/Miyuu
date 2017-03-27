@@ -68,6 +68,14 @@ namespace Miyuu.Cns
 		{
 			switch (msg)
 			{
+				case IMM.WindowMessage.InputLanguageChange:
+					{
+						if (Enabled)
+						{
+							IMM.ImmAssociateContext(_windowHandle, _hImc);
+						}
+						return (IntPtr)1;
+					}
 				case IMM.WindowMessage.ImeSetContext:
 					{
 						if (wParam.ToInt32() == 1)
