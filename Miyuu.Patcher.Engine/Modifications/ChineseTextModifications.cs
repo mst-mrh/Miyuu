@@ -325,14 +325,14 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Type a command: "] = "输入指令: ",
 				["Unloading mods..."] = "卸载模组中...",
 			};
-			InvokeReplace("Interface", items);
+			InvokeReplace("Terraria.ModLoader.Interface", items);
 
 			items = new Dictionary<string, string>
 			{
 				["Cancel"] = "取消",
 				["Downloading: "] = "下载中: "
 			};
-			InvokeReplace("UIDownloadMod", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIDownloadMod", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -341,20 +341,20 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Visit Website to Generate Passphrase"] = "访问网站以生成密码",
 				["Paste Passphrase (ctrl-v)"] = "粘贴密码 (CTRL+V)"
 			};
-			InvokeReplace("UIEnterPassphraseMenu", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIEnterPassphraseMenu", items);
 
 			items = new Dictionary<string, string>
 			{
 				["Continue"] = "继续",
 				["Open Logs"] = "打开日志"
 			};
-			InvokeReplace("UIErrorMessage", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIErrorMessage", items);
 
 			items = new Dictionary<string, string>
 			{
 				["OK"] = "好"
 			};
-			InvokeReplace("UIInfoMessage", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIInfoMessage", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -366,7 +366,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Adding Recipes..."] = "增加配方: ",
 				["Initializing: "] = "初始化: "
 			};
-			InvokeReplace("UILoadMods", items);
+			InvokeReplace("Terraria.ModLoader.UI.UILoadMods", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -375,7 +375,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Mod Browser OFFLINE (Busy)"] = "模组浏览器离线. (忙)",
 				["Mod Browser OFFLINE."] = "模组浏览器离线."
 			};
-			InvokeReplace("UIManagePublished", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIManagePublished", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -396,7 +396,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Clear Special Filter: ??"] = "",
 				["None"] = "",
 			};
-			InvokeReplace("UIModBrowser", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIModBrowser", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -408,7 +408,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["The Mod Browser server is under heavy load. Try again later."] = "模组浏览器正忙, 请稍后再试.",
 				["Unknown Mod Browser Error. Try again later."] = "未知模组浏览器错误, 请稍后再试.",
 			};
-			InvokeReplace("UIModDownloadItem", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIModDownloadItem", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -418,7 +418,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Back"] = "返回",
 				["No description available"] = "无可用描述",
 			};
-			InvokeReplace("UIModInfo", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIModInfo", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -431,7 +431,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Disabled"] = "已禁用",
 				["Reload Required"] = "需要重新加载",
 			};
-			InvokeReplace("UIModItem", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIModItem", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -440,7 +440,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				[" latest version)"] = " 最新版本)",
 				["Unpublish"] = "取消发布"
 			};
-			InvokeReplace("UIModManageItem", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIModManageItem", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -452,7 +452,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["This list contains the following mods:\n"] = "该列表包含以下模组:\n",
 				[" - Missing"] = " - 缺少"
 			};
-			InvokeReplace("UIModPackItem", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIModPackItem", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -461,7 +461,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Save Enabled as New Mod Pack"] = "保存已开启模组为新整合包",
 				["Enter Mod Pack name"] = "输入新整合包名"
 			};
-			InvokeReplace("UIModPacks", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIModPacks", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -474,7 +474,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Type to search"] = "键入以搜索",
 				["Mod Packs"] = "模组整合包",
 			};
-			InvokeReplace("UIMods", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIMods", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -482,7 +482,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Build + Reload"] = "生成并重新加载",
 				["Publish"] = "发布"
 			};
-			InvokeReplace("UIModSourceItem", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIModSourceItem", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -493,21 +493,21 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Open Sources"] = "打开源码",
 				["Manage Published"] = "管理已发布模组"
 			};
-			InvokeReplace("UIModSources", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIModSources", items);
 
 			items = new Dictionary<string, string>
 			{
 				["Ignore"] = "忽略",
 				["Download"] = "下载"
 			};
-			InvokeReplace("UIUpdateMessage", items);
+			InvokeReplace("Terraria.ModLoader.UI.UIUpdateMessage", items);
 
 			items = new Dictionary<string, string>
 			{
 				["The game has crashed!"] = "本游戏崩溃了!",
 				["Adding mod content..."] = "增加模组内容...",
 			};
-			InvokeReplace("ModLoader", items);
+			InvokeReplace("Terraria.ModLoader.ModLoader", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -519,7 +519,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Sort by popularity"] = "按模组人气排序",
 				["Unknown Sort"] = "未知"
 			};
-			InvokeReplace("SortModesExtensions", items);
+			InvokeReplace("Terraria.ModLoader.UI.SortModesExtensions", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -527,7 +527,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Search by Author name"] = "搜索作者名",
 				["Unknown Sort"] = "未知"
 			};
-			InvokeReplace("SearchFilterModesExtensions", items);
+			InvokeReplace("Terraria.ModLoader.UI.SearchFilterModesExtensions", items);
 
 			items = new Dictionary<string, string>
 			{
@@ -536,7 +536,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Show only updates"] = "显示有更新的模组",
 				["Unknown Sort"] = "未知"
 			};
-			InvokeReplace("UpdateFilterModesExtensions", items);
+			InvokeReplace("Terraria.ModLoader.UI.UpdateFilterModesExtensions", items);
 		}
 
 		[ModApplyTo(TerrariaServer, TmlServer, Otapi)]
@@ -669,13 +669,13 @@ namespace Miyuu.Patcher.Engine.Modifications
 			return s;
 		}
 
-		private void InvokeReplace(string typeName, IDictionary<string, string> items)
+		private void InvokeReplace(string fullName, IDictionary<string, string> items)
 		{
-			Info($"执行类 {typeName} 文本更改..");
-
-			var type = SourceModuleDef.Types.Single(t => t.Name == typeName);
+			var type = SourceModuleDef.Types.Single(t => t.FullName.Equals(fullName, StringComparison.Ordinal));
 			foreach (var m in type.Methods)
 				ReplaceAllLdstr(m.Body.Instructions, items);
+
+			Info($"完成类 {type.Name} 文本更改");
 		}
 
 		private static void ReplaceAllLdstr(IList<Instruction> inst, IDictionary<string, string> items)
