@@ -97,6 +97,18 @@ namespace Miyuu.Cns
 
 			_cnFont = font;
 
+#if TML
+			if (Main.XfontCombatText == null)
+			{
+				Main.XfontCombatText = new SpriteFontCn[2];
+			}
+
+			Main.XfontMouseText = new SpriteFontCn(new Font(_cnFont, 17.55F, GraphicsUnit.Pixel));
+			Main.XfontItemStack = new SpriteFontCn(new Font(_cnFont, 16.2F, GraphicsUnit.Pixel));
+			Main.XfontDeathText = new SpriteFontCn(new Font(_cnFont, 33.75F, GraphicsUnit.Pixel));
+			Main.XfontCombatText[1] = new SpriteFontCn(new Font(_cnFont, 20.25F, GraphicsUnit.Pixel));
+			Main.XfontCombatText[0] = new SpriteFontCn(new Font(_cnFont, 17.55F, GraphicsUnit.Pixel));
+#else
 			if (Main.fontCombatText == null)
 			{
 				Main.fontCombatText = new SpriteFontCn[2];
@@ -107,6 +119,7 @@ namespace Miyuu.Cns
 			Main.fontDeathText = new SpriteFontCn(new Font(_cnFont, 33.75F, GraphicsUnit.Pixel));
 			Main.fontCombatText[1] = new SpriteFontCn(new Font(_cnFont, 20.25F, GraphicsUnit.Pixel));
 			Main.fontCombatText[0] = new SpriteFontCn(new Font(_cnFont, 17.55F, GraphicsUnit.Pixel));
+#endif
 		}
 
 		public static void DrawGroupInfo(Color color)
@@ -134,16 +147,21 @@ namespace Miyuu.Cns
 					num108 = -2;
 				if (i == 3)
 					num108 = 2;
+#if TML
+				var o3 = Main.XfontMouseText.MeasureString(groupInfo);
+#else
 				var o3 = Main.fontMouseText.MeasureString(groupInfo);
+#endif
 				o3.X *= 0.5f;
 				o3.Y *= 0.5f;
 #if !TML
 				Main.spriteBatch.DrawString(Main.fontMouseText, groupInfo,
 					new Vector2(o3.X + num107 + 10f, Main.screenHeight - o3.Y + num108 - 22f), c6, 0f, o3, 1f, SpriteEffects.None, 0f);
 #else
-				Main.spriteBatch.DrawString(Main.fontMouseText, groupInfo,
+				Main.spriteBatch.DrawString(Main.XfontMouseText, groupInfo,
 					new Vector2(Main.screenWidth - o3.X + num108 - 10f, Main.screenHeight - o3.Y + num107 - 23f), c6, 0f, o3, 1f, SpriteEffects.None, 0f);
 #endif
+				Main.ignoreErrors = false;
 			}
 		}
 
@@ -174,5 +192,5 @@ namespace Miyuu.Cns
 
 		private const int DefaultProcessor = 0x00000001;
 #endif
-	}
+			}
 }
