@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
 using Microsoft.Xna.Framework;
@@ -59,14 +60,15 @@ namespace Miyuu.ModCompatizer
 		{
 			LoadAssembly();
 
-			ReplaceDeclarations();
+			ReplaceCnFontName();
+			ReplaceDeclarationsTml();
 			ReplaceDsCall();
-			Test();
+			ReplaceMiscs();
 
 			Save();
 		}
 
-		private void Test()
+		private void ReplaceMiscs()
 		{
 			foreach (var t in _module.Types)
 			{
@@ -75,22 +77,21 @@ namespace Miyuu.ModCompatizer
 					var inst = m.Body?.Instructions;
 					if (inst == null)
 						continue;
+
 					for (var index = 0; index < inst.Count; index++)
 					{
 						var i = inst[index];
 						if (i.OpCode.Equals(OpCodes.Ldsfld) &&
 							i.Operand?.ToString().StartsWith("Microsoft.Xna.Framework.Graphics.SpriteFont") == true)
 						{
-							var member = i.Operand as MemberRef;
-							if(member != null)
+							if (i.Operand is MemberRef member)
 								member.FieldSig.Type = _importer.ImportAsTypeSig(typeof(SpriteFontCn));
 						}
 
-						// ReSharper disable once InvertIf
+
 						if (i.OpCode.Equals(OpCodes.Call))
 						{
-							var method = i.Operand as IMethodDefOrRef;
-							if (method != null)
+							if (i.Operand is IMethodDefOrRef method)
 							{
 								for (var i1 = 0; i1 < method.MethodSig.Params.Count; i1++)
 								{
@@ -105,7 +106,33 @@ namespace Miyuu.ModCompatizer
 			}
 		}
 
-		private void ReplaceDeclarations()
+		private void ReplaceCnFontName()
+		{
+			var fonts = new[]
+			{
+				"fontMouseText",
+				"fontItemStack",
+				"fontDeathText",
+				"fontCombatText"
+			};
+
+			var replaces = 0;
+
+			var replaceItems = fonts.Select(name => new ReplaceItem
+			{
+				Old = OpCodes.Ldsfld.ToInstruction(_importer.Import(typeof(Terraria.Main).GetField(name))),
+				New = OpCodes.Ldsfld.ToInstruction(_importer.Import(typeof(Terraria.Main).GetField("X" + name)))
+			}).ToArray();
+
+			foreach (var type in _module.Types)
+			{
+				ReplaceAllInstructionsX(type, replaceItems, ref replaces);
+			}
+
+			Console.WriteLine($"替换调用字段: {replaces}");
+		}
+
+		private void ReplaceDeclarationsTml()
 		{
 			foreach (var type in _module.Types)
 			{
@@ -195,16 +222,6 @@ namespace Miyuu.ModCompatizer
 				field.FieldType = RightType(field.FieldType, t1, t2);
 			}
 
-			foreach (var property in type.Properties)
-			{
-				PropertySig s;
-				if ((s = property.Type as PropertySig)?.RetType != null)
-				{
-					var t = s.RetType;
-					s.RetType = RightType(t, t1, t2);
-				}
-			}
-
 			foreach (var method in type.Methods)
 			{
 				if (method.Parameters?.Count > 0)
@@ -214,7 +231,6 @@ namespace Miyuu.ModCompatizer
 						p.Type = RightType(p.Type, t1, t2);
 					}
 				}
-				method.ReturnType = RightType(method.ReturnType, t1, t2);
 				// ReSharper disable once InvertIf
 				if (method.Body?.HasVariables == true && method.Body.Variables != null)
 				{
@@ -230,6 +246,7 @@ namespace Miyuu.ModCompatizer
 
 		private static TypeSig RightType(TypeSig origin, TypeSig old, TypeSig @new)
 		{
+			if (origin == null) return null;
 			if (!origin.IsSZArray && origin.FullName != old.FullName)
 			{
 				return origin;
@@ -267,6 +284,36 @@ namespace Miyuu.ModCompatizer
 							continue;
 
 						inst[index] = item.New.Clone();
+						count++;
+					}
+				}
+			}
+		}
+
+		private static void ReplaceAllInstructionsX(TypeDef type, ReplaceItem[] replaces, ref int count)
+		{
+			foreach (var nested in type.NestedTypes)
+			{
+				ReplaceAllInstructionsX(nested, replaces, ref count);
+			}
+
+			foreach (var method in type.Methods)
+			{
+				if (method.Body == null)
+					continue;
+
+				var inst = method.Body.Instructions;
+
+				for (var index = 0; index < inst.Count; index++)
+				{
+					var ins = inst[index];
+
+					foreach (var item in replaces)
+					{
+						if (!ins.OpCode.Equals(item.Old.OpCode) || ins.Operand.ToString() != item.Old.Operand.ToString())
+							continue;
+
+						inst[index].Operand = item.New.Operand;
 						count++;
 					}
 				}
