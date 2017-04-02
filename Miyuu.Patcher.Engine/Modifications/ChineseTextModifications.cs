@@ -380,9 +380,10 @@ namespace Miyuu.Patcher.Engine.Modifications
 			items = new Dictionary<string, string>
 			{
 				["Mod Browser"] = "模组浏览器",
-				["Reload Mods"] = "重新加载列表",
-				["Reloading..."] = "加载中...",
-				["Loading..."] = "加载中...",
+				["Getting data..."] = "加载数据中..",
+				["Don't show again"] = "以后不要再提示了",
+				["Reload browser"] = "重新加载列表",
+				["Populating browser..."] = "加载中...",
 				["Back"] = "返回",
 				["Type to search"] = "键入以搜索",
 				["You have updated a mod. Remember to reload mods for it to take effect."] = "你已经更新了模组。\n你需要进入模组菜单点击重新加载使其生效。",
@@ -392,21 +393,23 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Mod Browser OFFLINE.."] = "模组浏览器离线..",
 				["Mod Browser OFFLINE (Unknown)"] = "模组浏览器离线. (未知)",
 				["Mod Browser OFFLINE."] = "模组浏览器离线.",
-				["Clear Special Filter: "] = "",
-				["Clear Special Filter: ??"] = "",
-				["None"] = "",
+				["Clear Special Filter: "] = "清除特殊筛选器: ",
+				["Clear Special Filter: ??"] = "清除特殊筛选器: ??",
+				["None"] = "无"
 			};
 			InvokeReplace("Terraria.ModLoader.UI.UIModBrowser", items);
 
 			items = new Dictionary<string, string>
 			{
 				["More info"] = "更多信息",
-				[" - by "] = " - 制作者: ",
+				["By: "] = "作者: ",
 				["Update"] = "更新",
+				["Downgrade"] = "降级",
 				["Download"] = "下载",
-				["Updated: "] = "更新: ",
 				["The Mod Browser server is under heavy load. Try again later."] = "模组浏览器正忙, 请稍后再试.",
 				["Unknown Mod Browser Error. Try again later."] = "未知模组浏览器错误, 请稍后再试.",
+				["This mod depends on: "] = "本模组依赖于: ",
+				["There was a problem, try again"] = "发生问题, 请重新加载",
 			};
 			InvokeReplace("Terraria.ModLoader.UI.UIModDownloadItem", items);
 
@@ -414,6 +417,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 			{
 				["This is a test of mod info here."] = "这里是一条测试消息.",
 				["Mod Info"] = "模组信息",
+				["Mod Info: "] = "模组信息: ",
 				["Visit the Mod's Homepage for even more info"] = "访问该模组的网页来获取更多信息",
 				["Back"] = "返回",
 				["No description available"] = "无可用描述",
@@ -422,14 +426,19 @@ namespace Miyuu.Patcher.Engine.Modifications
 
 			items = new Dictionary<string, string>
 			{
-				[" - by "] = " - 作者: ",
+				["By: "] = "作者: ",
 				["More info"] = "更多信息",
-				["Click to Disable"] = "点击以禁用",
-				["Click to Enable"] = "点击以启用",
-				["This mod originated from the Mod Browser"] = "该模组来自模组浏览器",
 				["Enabled"] = "已启用",
+				["Enable"] = "启用",
 				["Disabled"] = "已禁用",
+				["Disable"] = "禁用",
 				["Reload Required"] = "需要重新加载",
+				[" items"] = " 物品",
+				[" NPCs"] = " NPC",
+				[" tiles"] = " 物块",
+				[" walls"] = " 墙壁",
+				[" buffs"] = " Buff",
+				[" mounts"] = " 坐骑"
 			};
 			InvokeReplace("Terraria.ModLoader.UI.UIModItem", items);
 
@@ -537,6 +546,23 @@ namespace Miyuu.Patcher.Engine.Modifications
 				["Unknown Sort"] = "未知"
 			};
 			InvokeReplace("Terraria.ModLoader.UI.UpdateFilterModesExtensions", items);
+
+			items = new Dictionary<string, string>
+			{
+				[" seconds ago"] = "秒之前",
+				["1 second ago"] = "1秒之前",
+				["1 minute ago"] = "1分钟之前",
+				[" minutes ago"] = "分钟之前",
+				["1 hour ago"] = "1小时之前",
+				[" hours ago"] = "小时之前",
+				["1 day ago"] = "1天之前",
+				[" days ago"] = "天之前",
+				[" months ago"] = "月之前",
+				["1 month ago"] = "1月之前",
+				[" years ago"] = "年之前",
+				["1 year ago"] = "1年之前"
+			};
+			InvokeReplace("Terraria.ModLoader.UI.TimeHelper", items);
 		}
 
 		[ModApplyTo(TerrariaServer, TmlServer, Otapi)]
@@ -672,7 +698,11 @@ namespace Miyuu.Patcher.Engine.Modifications
 		private void InvokeReplace(string fullName, IDictionary<string, string> items)
 		{
 			var type = SourceModuleDef.Types.Single(t => t.FullName.Equals(fullName, StringComparison.Ordinal));
-			foreach (var m in type.Methods)
+			foreach(var t in type.NestedTypes)
+				foreach(var m in t.Methods.Where(x => x.HasBody))
+					ReplaceAllLdstr(m.Body.Instructions, items);
+
+			foreach (var m in type.Methods.Where(x => x.HasBody))
 				ReplaceAllLdstr(m.Body.Instructions, items);
 
 			Info($"完成类 {type.Name} 文本更改");
@@ -686,8 +716,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 			foreach (var ins in inst)
 			{
 				if (!ins.OpCode.Equals(OpCodes.Ldstr)) continue;
-				string newString;
-				if (!items.TryGetValue(ins.Operand.ToString(), out newString))
+				if (!items.TryGetValue(ins.Operand.ToString(), out string newString))
 				{
 					continue;
 				}
