@@ -40,8 +40,6 @@ namespace Miyuu.Patcher
 			{
 				_option.WriteOptionDescriptions(Console.Out);
 			}
-
-			Console.ReadKey();
 		}
 	}
 }
