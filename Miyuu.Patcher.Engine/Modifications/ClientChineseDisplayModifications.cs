@@ -231,33 +231,26 @@ namespace Miyuu.Patcher.Engine.Modifications
 
 			main.Methods.Remove(loadfont); // 避免数组名被更改
 
+			var fonts = new[]
+			{
+				"fontMouseText",
+				"fontItemStack",
+				"fontDeathText",
+				"fontCombatText"
+			};
+
+			var replaceItems = fonts.Select(name => new ReplaceItem
+			{
+				Old = OpCodes.Ldsfld.ToInstruction(main.FindField(name)),
+				New = OpCodes.Ldsfld.ToInstruction(main.FindField("X" + name))
+			}).ToArray();
+
 			foreach (var type in SourceModuleDef.Types)
 			{
-				ReplaceAllInstructionsX(type,
-						new[]
-						{
-							new ReplaceItem
-							{
-								Old = OpCodes.Ldsfld.ToInstruction(main.FindField("fontMouseText")),
-								New = OpCodes.Ldsfld.ToInstruction(main.FindField("XfontMouseText"))
-							},
-							new ReplaceItem
-							{
-								Old = OpCodes.Ldsfld.ToInstruction(main.FindField("fontItemStack")),
-								New = OpCodes.Ldsfld.ToInstruction(main.FindField("XfontItemStack"))
-							},
-							new ReplaceItem
-							{
-								Old = OpCodes.Ldsfld.ToInstruction(main.FindField("fontDeathText")),
-								New = OpCodes.Ldsfld.ToInstruction(main.FindField("XfontDeathText"))
-							},
-							new ReplaceItem
-							{
-								Old = OpCodes.Ldsfld.ToInstruction(main.FindField("fontCombatText")),
-								New = OpCodes.Ldsfld.ToInstruction(main.FindField("XfontCombatText"))
-							}
-						},
-						ref replaces);
+				foreach (var nested in type.NestedTypes)
+					ReplaceAllInstructionsX(type, replaceItems, ref replaces);
+
+				ReplaceAllInstructionsX(type, replaceItems, ref replaces);
 			}
 
 			main.Methods.Add(loadfont);
@@ -354,8 +347,15 @@ namespace Miyuu.Patcher.Engine.Modifications
 				field.FieldType = RightType(field.FieldType, t1, t2);
 			}
 
+			foreach (var prop in type.Properties)
+			{
+				prop.PropertySig.RetType = RightType(prop.PropertySig.RetType, t1, t2);
+			}
+
 			foreach (var method in type.Methods)
 			{
+				method.ReturnType = RightType(method.ReturnType, t1, t2);
+
 				if (method.Parameters?.Count > 0)
 				{
 					foreach (var p in method.Parameters)

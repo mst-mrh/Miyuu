@@ -72,6 +72,18 @@ namespace Miyuu.ModCompatizer
 		{
 			foreach (var t in _module.Types)
 			{
+				InternalReplaceMiscsForType(t);
+			}
+
+			void InternalReplaceMiscsForType(TypeDef t)
+			{
+				var font = _importer.ImportAsTypeSig(typeof(SpriteFontCn));
+
+				foreach (var nested in t.NestedTypes)
+				{
+					InternalReplaceMiscsForType(nested);
+				}
+
 				foreach (var m in t.Methods)
 				{
 					var inst = m.Body?.Instructions;
@@ -85,7 +97,7 @@ namespace Miyuu.ModCompatizer
 							i.Operand?.ToString().StartsWith("Microsoft.Xna.Framework.Graphics.SpriteFont") == true)
 						{
 							if (i.Operand is MemberRef member)
-								member.FieldSig.Type = _importer.ImportAsTypeSig(typeof(SpriteFontCn));
+								member.FieldSig.Type = font;
 						}
 
 
@@ -96,8 +108,7 @@ namespace Miyuu.ModCompatizer
 								for (var i1 = 0; i1 < method.MethodSig.Params.Count; i1++)
 								{
 									var type = method.MethodSig.Params[i1];
-									method.MethodSig.Params[i1] = RightType(type, _importer.ImportAsTypeSig(typeof(SpriteFont)),
-										_importer.ImportAsTypeSig(typeof(SpriteFontCn)));
+									method.MethodSig.Params[i1] = RightType(type, _importer.ImportAsTypeSig(typeof(SpriteFont)), font);
 								}
 							}
 						}
@@ -126,6 +137,8 @@ namespace Miyuu.ModCompatizer
 
 			foreach (var type in _module.Types)
 			{
+				foreach(var nested in type.NestedTypes)
+					ReplaceAllInstructionsX(nested, replaceItems, ref replaces);
 				ReplaceAllInstructionsX(type, replaceItems, ref replaces);
 			}
 
@@ -222,8 +235,15 @@ namespace Miyuu.ModCompatizer
 				field.FieldType = RightType(field.FieldType, t1, t2);
 			}
 
+			foreach (var prop in type.Properties)
+			{
+				prop.PropertySig.RetType = RightType(prop.PropertySig.RetType, t1, t2);
+			}
+
 			foreach (var method in type.Methods)
 			{
+				method.ReturnType = RightType(method.ReturnType, t1, t2);
+
 				if (method.Parameters?.Count > 0)
 				{
 					foreach (var p in method.Parameters)

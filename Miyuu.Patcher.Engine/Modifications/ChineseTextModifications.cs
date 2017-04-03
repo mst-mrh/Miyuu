@@ -487,7 +487,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 
 			items = new Dictionary<string, string>
 			{
-				["Build"] = "取消",
+				["Build"] = "生成",
 				["Build + Reload"] = "生成并重新加载",
 				["Publish"] = "发布"
 			};
