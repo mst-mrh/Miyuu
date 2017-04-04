@@ -167,7 +167,7 @@ namespace Miyuu.Cns
 
 		public static void Update()
 		{
-			_userInput = Main.drawingPlayerChat || Main.editSign || Main.editChest || Main.gameMenu && Main.menuMode == 888;
+			_userInput = ClaymanInputCaputure.ForceEnable || Main.drawingPlayerChat || Main.editSign || Main.editChest || Main.gameMenu && Main.menuMode == 888;
 			if (_userInput && !Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
 			{
 				if (!ClaymanInputCaputure.Enabled)

@@ -24,15 +24,24 @@ namespace Miyuu.Cns
 
 		internal static bool Enabled { get; private set; }
 
-		public static void OpenImm()
+		internal static bool ForceEnable { get; private set; }
+
+		internal static void OpenImm()
 		{
 			Enabled = true;
 			IMM.ImmAssociateContext(_windowHandle, _hImc);
 		}
 
+		public static void ForceOpenImm()
+		{
+			ForceEnable = true;
+			OpenImm();
+		}
+
 		public static void CloseImm()
 		{
 			Enabled = false;
+			ForceEnable = false;
 			IMM.ImmAssociateContext(_windowHandle, IntPtr.Zero);
 		}
 
