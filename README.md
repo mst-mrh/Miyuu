@@ -6,10 +6,12 @@
 
 本程序支持[Terraria游戏][tr]程序及修改版Terraria，列表如下：
 
+(tModLoader可以直接点击编译状态图标进入最新版下载)
+
 * [Terraria][tr]
-* [tModLoader][tmodloader]
+* [tModLoader][tmodloader][![编译状态](https://ci.appveyor.com/api/projects/status/cms5jh589m2m8sgo?svg=true)][cidownload]
 * [TerrariaServer][trserver]
-* [tModLoaderServer][tmodloader]
+* [tModLoaderServer][tmodloader][![编译状态](https://ci.appveyor.com/api/projects/status/cms5jh589m2m8sgo?svg=true)][cidownload]
 * [Open Terraria API][otapi]
 
 ## 作者及参考
@@ -41,3 +43,5 @@
 [cntext]: https://github.com/mst-mrh/TerrariaTextsInChinese
 [kyz]: https://github.com/mst-mrh
 [mistzzt]: https://github.com/mistzzt
+
+[cidownload]: https://ci.appveyor.com/project/mistzzt/miyuu/build/artifacts
