@@ -1,0 +1,57 @@
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+
+version: 0.0.{build}
+
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+image: Visual Studio 2017
+
+install:
+  - ps: wget https://download.microsoft.com/download/A/C/2/AC2C903B-E6E8-42C2-9FD7-BEBAC362A930/xnafx40_redist.msi -outfile xna.msi
+  - ps: ./xna.msi /passive
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+
+platform:
+  - Any CPU
+
+configuration:
+  - Release
+
+build:
+  parallel: true
+  project: Miyuu.Tml.sln
+
+before_build:
+  - cmd: git submodule update --init --recursive
+  - ps: appveyor-retry nuget restore Miyuu.Tml.sln
+  - ps: ./scripts/Fetch_tModLoader.ps1
+  - ps: rename-item temp tmlcn
+
+build_script:
+
+after_build:
+  - ps: cd Debug
+  - ps: ./Miyuu.Patcher --in=..\libs\tModLoader.exe --out=Terraria.exe
+  - ps: ./Miyuu.Patcher --in=..\libs\tModLoaderServer.exe --out=tModLoaderServer.exe
+  - ps: cd ..
+  - ps: ./scripts/create_tml.ps1
+
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+
+test: off
+
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#
+
+artifacts:
+  - path: tmlcn.zip
