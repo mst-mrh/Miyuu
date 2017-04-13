@@ -54,4 +54,4 @@ test: off
 #---------------------------------#
 
 artifacts:
-  - path: tmlcn.zip
+  - path: tModLoaderCN.Windows.*.zip

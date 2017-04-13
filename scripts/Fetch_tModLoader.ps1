@@ -1,8 +1,16 @@
-$vers = ((Invoke-WebRequest https://github.com/bluemagic123/tModLoader/releases).Links | Where-Object -Property outerText -like "*tModLoader.Windows.*")
+$downloadLinks = ((Invoke-WebRequest https://github.com/bluemagic123/tModLoader/releases).Links | Where-Object -Property outerText -like "*tModLoader.Windows.*")
 
-$link = "https://github.com" + $vers[0].href
+$latest = $downloadLinks[0]
 
-Write-Output ("Downloading latest tModLoader from " + $link)
+$latest.outerText -match "v\d+(\.\d+){0,3}"
+
+$matches[0] | Out-File -FilePath "LatestVersion.txt"
+
+$link = "https://github.com" + $latest.href
+
+Write-Output ("Detected latest tModLoader version: " + $matches[0])
+
+Write-Output ("Downloading from " + $link)
 
 Try
 {

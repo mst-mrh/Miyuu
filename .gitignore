@@ -241,7 +241,11 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 
+# miyuu compile path
 Debug/
 
+# tml fetcher
 libs/tModLoader.exe
 libs/tModLoaderServer.exe
+scripts/LatestVersion.txt
+scripts/temp/
