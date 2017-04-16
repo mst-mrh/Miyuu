@@ -32,3 +32,5 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 Move-Item temp\Terraria.exe libs\tModLoader.exe
 Move-Item temp\tModLoaderServer.exe libs\
 Remove-Item temp\README.txt
+
+Move-Item prebuilts\font.ttf temp\font.ttf
