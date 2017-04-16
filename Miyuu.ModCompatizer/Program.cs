@@ -1,15 +1,37 @@
 ﻿using System;
 using System.IO;
+using NDesk.Options;
 
 namespace Miyuu.ModCompatizer
 {
 	internal class Program
 	{
-		private static void Main()
+		private static void Main(string[] args)
 		{
-			PatchMods();
+			Console.WriteLine("{0} v{1}{2}", typeof(Program).Namespace,
+				System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(3),
+				Environment.NewLine);
 
-			Console.ReadKey();
+			if (args.Length > 0)
+				Console.WriteLine("args: {0}", string.Join(" ", args));
+
+			string path = null;
+
+			var options = new OptionSet
+			{
+				{"f|file=", "Mod file path", v => path = v }
+			};
+
+			options.Parse(args);
+
+			if (string.IsNullOrWhiteSpace(path))
+			{
+				PatchMods();
+			}
+			else
+			{
+				new CnCompatizer(new TmodFile(path)).Run();
+			}
 		}
 
 		private static void PatchMods()
@@ -28,7 +50,7 @@ namespace Miyuu.ModCompatizer
 					Console.WriteLine();
 					try
 					{
-						
+
 					}
 					catch (Exception e)
 					{

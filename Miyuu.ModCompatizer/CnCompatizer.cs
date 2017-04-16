@@ -14,8 +14,6 @@ namespace Miyuu.ModCompatizer
 	{
 		public TmodFile Tmod { get; }
 
-		public string PdbPath { get; }
-
 		private ModuleDefMD _module;
 
 		private Importer _importer;
@@ -28,18 +26,13 @@ namespace Miyuu.ModCompatizer
 
 			Console.WriteLine("开始读取tmod文件..");
 			tmod.Read();
-			SourceAssemblyPath = tmod.GetTempMainAssembly();
-			PdbPath = tmod.GetTempMainPdb();
+			SourceAssemblyPath = tmod.GetMainAssemblyPath();
 
 			if (string.IsNullOrWhiteSpace(SourceAssemblyPath))
 			{
 				throw new Exception("处理模组格式无效: 缺少dll文件");
 			}
 			Console.WriteLine("输出临时路径: {0}", SourceAssemblyPath);
-			if (!string.IsNullOrWhiteSpace(PdbPath))
-			{
-				Console.WriteLine("Pdb文件路径: {0}", PdbPath);
-			}
 		}
 
 		protected void LoadAssembly()
@@ -215,7 +208,7 @@ namespace Miyuu.ModCompatizer
 			var tmpPath = Path.GetTempFileName();
 
 			_module.Write(tmpPath);
-			Tmod.SetFile(Tmod.HasFile("All.dll") ? "All.dll" : "Windows.dll", File.ReadAllBytes(tmpPath));
+			Tmod.SetMainAssembly(File.ReadAllBytes(tmpPath));
 			Tmod.Save();
 
 			Console.WriteLine("保存完毕: {0}", Tmod.Path);
