@@ -12,7 +12,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 {
 	internal class CustomInfoModifications : ModificationBase
 	{
-		public const string Terraria = "Terraria, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
+		public const string Terraria = "Terraria, Version=1.3.5.1, Culture=neutral, PublicKeyToken=null";
 		public const string TerrariaServer = "TerrariaServer, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
 		public const string Otapi = "OTAPI, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
 		public const string Tml = "tModLoader, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
@@ -66,7 +66,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 					(inst[index + 1].Operand == versionNumberField ||
 					inst[index + 1].Operand == versionNumber2Field))
 				{
-					ins.Operand = "v1.3.4.4汉化版v4";
+					ins.Operand = "v1.3.5.1中文v1";
 				}
 			}
 		}

@@ -48,6 +48,9 @@
       <HintPath>..\packages\NLog.4.4.1\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ReLogic">
+      <HintPath>..\libs\ReLogic.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,10 +58,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Logging.cs" />
-    <Compile Include="Modifications\ChineseTextModifications.cs" />
     <Compile Include="Modifications\ClientChineseDisplayModifications.cs" />
     <Compile Include="ModApplyToAttribute.cs" />
-    <Compile Include="Modifications\CnImeModifications.cs" />
     <Compile Include="Modifications\CnsLibModifications.cs" />
     <Compile Include="Modifications\CustomInfoModifications.cs" />
     <Compile Include="Modifications\ModificationBase.cs" />

@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Miyuu.Cns;
 using Miyuu.Extensions;
+using ReLogic.Graphics;
 
 namespace Miyuu.Patcher.Engine.Modifications
 {
 	internal class ClientChineseDisplayModifications : ModificationBase
 	{
-		public const string Terraria = "Terraria, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
+		public const string Terraria = "Terraria, Version=1.3.5.1, Culture=neutral, PublicKeyToken=null";
 		public const string Tml = "tModLoader, Version=1.3.4.4, Culture=neutral, PublicKeyToken=null";
 
 		private readonly List<Tuple<TypeDef, MethodDef>> _vanillaMethods = new List<Tuple<TypeDef, MethodDef>>();
@@ -151,8 +154,6 @@ namespace Miyuu.Patcher.Engine.Modifications
 			inst.Clear();
 
 			inst.Insert(0,
-				new { OpCodes.Ldarg_0 },
-				new { OpCodes.Ldfld, Operand = (IField)main.FindField("Cns") },
 				new { OpCodes.Call, Operand = Importer.Import(typeof(CnsMain), "LoadFonts") },
 				new { OpCodes.Ret }
 			);
@@ -186,7 +187,7 @@ namespace Miyuu.Patcher.Engine.Modifications
 
 			foreach (var type in SourceModuleDef.Types)
 			{
-				ReplaceDs(type, Importer.ImportAsTypeSig(typeof(SpriteFont)), Importer.ImportAsTypeSig(typeof(SpriteFontCn)));
+				ReplaceDs(type, Importer.ImportAsTypeSig(typeof(DynamicSpriteFont)), Importer.ImportAsTypeSig(typeof(SpriteFontCn)));
 			}
 
 			Info($"声明类型替换: {_declCount}");
@@ -265,11 +266,13 @@ namespace Miyuu.Patcher.Engine.Modifications
 			const string ms = "MeasureString";
 
 			var typeOfString = typeof(string);
+			var typeOfStringBuilder = typeof(StringBuilder);
 			var typeOfFloat = typeof(float);
 			var typeOfVector2 = typeof(Vector2);
 			var typeOfColor = typeof(Color);
+			var typeOfSf = typeof(DynamicSpriteFont);
+			var typeOfSfEx = typeof(DynamicSpriteFontExtensionMethods);
 			var typeOfSb = typeof(SpriteBatch);
-			var typeOfSf = typeof(SpriteFont);
 			var typeOfSe = typeof(SpriteEffects);
 
 			var typeOfSfcn = typeof(SpriteFontCn);
@@ -289,18 +292,38 @@ namespace Miyuu.Patcher.Engine.Modifications
 							},
 							new ReplaceItem
 							{
-								Old = OpCodes.Callvirt.ToInstruction(Importer.Import(typeOfSb, ds, new[] {typeOfSf, typeOfString, typeOfVector2, typeOfColor})),
-								New = OpCodes.Call.ToInstruction(Importer.Import(typeOfSbcn, ds, new[] {typeOfSb, typeOfSfcn, typeOfString, typeOfVector2, typeOfColor}))
+								Old = OpCodes.Call.ToInstruction(Importer.Import(typeOfSfEx, ds, new[] { typeOfSb, typeOfSf, typeOfString, typeOfVector2, typeOfColor})),
+								New = OpCodes.Call.ToInstruction(Importer.Import(typeOfSbcn, ds, new[] { typeOfSb, typeOfSfcn, typeOfString, typeOfVector2, typeOfColor}))
 							},
 							new ReplaceItem
 							{
-								Old = OpCodes.Callvirt.ToInstruction(Importer.Import(typeOfSb, ds, new[] {typeOfSf, typeOfString, typeOfVector2, typeOfColor, typeOfFloat, typeOfVector2, typeOfFloat, typeOfSe, typeOfFloat})),
+								Old = OpCodes.Call.ToInstruction(Importer.Import(typeOfSfEx, ds, new[] { typeOfSb, typeOfSf, typeOfString, typeOfVector2, typeOfColor, typeOfFloat, typeOfVector2, typeOfFloat, typeOfSe, typeOfFloat})),
 								New = OpCodes.Call.ToInstruction(Importer.Import(typeOfSbcn, ds, new[] {typeOfSb, typeOfSfcn, typeOfString, typeOfVector2, typeOfColor, typeOfFloat, typeOfVector2, typeOfFloat, typeOfSe, typeOfFloat}))
 							},
 							new ReplaceItem
 							{
-								Old = OpCodes.Callvirt.ToInstruction(Importer.Import(typeOfSb, ds, new[] {typeOfSf, typeOfString, typeOfVector2, typeOfColor, typeOfFloat, typeOfVector2, typeOfVector2, typeOfSe, typeOfFloat})),
+								Old = OpCodes.Call.ToInstruction(Importer.Import(typeOfSfEx, ds, new[] { typeOfSb, typeOfSf, typeOfString, typeOfVector2, typeOfColor, typeOfFloat, typeOfVector2, typeOfVector2, typeOfSe, typeOfFloat})),
 								New = OpCodes.Call.ToInstruction(Importer.Import(typeOfSbcn, ds, new[] {typeOfSb, typeOfSfcn, typeOfString, typeOfVector2, typeOfColor, typeOfFloat, typeOfVector2, typeOfVector2, typeOfSe, typeOfFloat}))
+							}, // sb
+							new ReplaceItem
+							{
+								Old = OpCodes.Call.ToInstruction(Importer.Import(typeOfSfEx, ds, new[] { typeOfSb, typeOfSf, typeOfStringBuilder, typeOfVector2, typeOfColor})),
+								New = OpCodes.Call.ToInstruction(Importer.Import(typeOfSbcn, ds, new[] { typeOfSb, typeOfSfcn, typeOfStringBuilder, typeOfVector2, typeOfColor}))
+							},
+							new ReplaceItem
+							{
+								Old = OpCodes.Call.ToInstruction(Importer.Import(typeOfSfEx, ds, new[] { typeOfSb, typeOfSf, typeOfStringBuilder, typeOfVector2, typeOfColor, typeOfFloat, typeOfVector2, typeOfFloat, typeOfSe, typeOfFloat})),
+								New = OpCodes.Call.ToInstruction(Importer.Import(typeOfSbcn, ds, new[] {typeOfSb, typeOfSfcn, typeOfStringBuilder, typeOfVector2, typeOfColor, typeOfFloat, typeOfVector2, typeOfFloat, typeOfSe, typeOfFloat}))
+							},
+							new ReplaceItem
+							{
+								Old = OpCodes.Call.ToInstruction(Importer.Import(typeOfSfEx, ds, new[] { typeOfSb, typeOfSf, typeOfStringBuilder, typeOfVector2, typeOfColor, typeOfFloat, typeOfVector2, typeOfVector2, typeOfSe, typeOfFloat})),
+								New = OpCodes.Call.ToInstruction(Importer.Import(typeOfSbcn, ds, new[] {typeOfSb, typeOfSfcn, typeOfStringBuilder, typeOfVector2, typeOfColor, typeOfFloat, typeOfVector2, typeOfVector2, typeOfSe, typeOfFloat}))
+							},
+							new ReplaceItem
+							{
+								Old = OpCodes.Callvirt.ToInstruction(Importer.Import(typeOfSf, "CreateWrappedText", new[] { typeOfString, typeOfFloat, typeof(CultureInfo)})),
+								New = OpCodes.Callvirt.ToInstruction(Importer.Import(typeOfSfcn, "CreateWrappedText", new[] { typeOfString, typeOfFloat, typeof(CultureInfo)}))
 							}
 						},
 						ref replaces);

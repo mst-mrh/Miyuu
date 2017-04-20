@@ -4,20 +4,23 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
+using ReLogic.Text;
 using Color = Microsoft.Xna.Framework.Color;
 using Terraria;
 #endif
 
 namespace Miyuu.Cns
 {
-	public class SpriteFontCn
+	public class SpriteFontCn : IFontMetrics
 	{
 #if !SERVER
-		private static object Locker = new object();
+		private static readonly object Locker = new object();
 
 		private Dictionary<char, CharTile> _charTiles = new Dictionary<char, CharTile>();
 
@@ -29,19 +32,19 @@ namespace Miyuu.Cns
 
 		private Bitmap _bitMap;
 
-		public Font Font => font;
-
-		private Font font;
+		public Font Font { get; }
 
 		private SizeF _size;
 
 		public int LineSpacing => 21;
 
+		public float CharacterSpacing => 0;
+
 		public int Spacing => 0;
 
 		public SpriteFontCn(Font font)
 		{
-			this.font = font;
+			Font = font;
 
 			_tempBm = new Bitmap(1, 1);
 			_tempGr = Graphics.FromImage(_tempBm);
@@ -151,75 +154,31 @@ namespace Miyuu.Cns
 			return result;
 		}
 
-		public string MeasureString_(string str, float maxWidth)
+		public GlyphMetrics GetCharacterMetrics(char character)
 		{
-			var array = str.ToCharArray();
-			var vector = new Vector2(1f, 1f);
-			var vector2 = new Vector2(maxWidth <= 0f ? 3.40282347E+38f : maxWidth, 3.40282347E+38f);
-			var vector3 = default(Vector2);
-			var vector4 = default(Vector2);
-			var text = "";
-			var i = 0;
-			var num = array.Length;
-			while (i < num)
-			{
-				var c = array[i];
-				if (c == '\n')
-				{
-					text += '\n';
-					vector3 = new Vector2(0f, vector4.Y);
-				}
-				else if (c != '\r')
-				{
-					if (!_charTiles.ContainsKey(c))
-					{
-						AddTex(c);
-					}
-					var charTile = _charTiles[c];
-					if (vector3.X + charTile.Rectangle.Width * vector.X > vector2.X)
-					{
-						if (charTile.Rectangle.Width * vector.X > vector2.X)
-						{
-							goto IL_244;
-						}
-						text += '\n';
-						vector3 = new Vector2(0f, vector4.Y);
-					}
-					if (vector3.Y + charTile.Rectangle.Height * vector.Y > vector4.Y)
-					{
-						if (vector3.Y + charTile.Rectangle.Height * vector.Y > vector2.Y)
-						{
-							break;
-						}
-						vector4.Y = vector3.Y + charTile.Rectangle.Height * vector.Y;
-					}
-					text += c;
-					vector3.X += charTile.Rectangle.Width * vector.X;
-					if (vector3.X > vector4.X)
-					{
-						vector4.X = vector3.X;
-					}
-				}
-				IL_244:
-				i++;
-				continue;
-			}
-			return text;
+			return GlyphMetrics.FromKerningData(0f, MeasureString(new[] { character }).X, 0f);
 		}
 
 		public Vector2 MeasureString(string str)
 		{
-			return MeasureString(str.ToCharArray(), 3.40282347E+38f);
+			return MeasureString(str.ToCharArray());
 		}
 
-		public Vector2 MeasureString(char[] chars)
+		private Vector2 MeasureString(char[] chars, float maxWidth = 3.40282347E+38f)
 		{
-			return MeasureString(chars, 3.40282347E+38f);
+			return Draw(null, chars, Vector2.Zero, new Vector2(maxWidth, maxWidth), new Vector2(1f, 1f), Color.White);
 		}
 
-		public Vector2 MeasureString(char[] chars, float maxWidth)
+		public string CreateWrappedText(string text, float maxWidth)
 		{
-			return Draw(null, chars, Vector2.Zero, new Vector2(maxWidth, 3.40282347E+38f), new Vector2(1f, 1f), Color.White);
+			return CreateWrappedText(text, maxWidth, Thread.CurrentThread.CurrentCulture);
+		}
+
+		public string CreateWrappedText(string text, float maxWidth, CultureInfo culture)
+		{
+			var wrappedTextBuilder = new WrappedTextBuilder(this, maxWidth, culture);
+			wrappedTextBuilder.Append(text);
+			return wrappedTextBuilder.ToString();
 		}
 
 		public static Texture2D ToTexture2D(Bitmap bitmap)

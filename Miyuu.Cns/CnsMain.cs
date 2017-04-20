@@ -4,79 +4,28 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.OS;
 using Terraria;
+using Terraria.Localization;
 using Color = Microsoft.Xna.Framework.Color;
 #endif
 
 namespace Miyuu.Cns
 {
-	public class CnsMain
+	public static class CnsMain
 	{
 #if !SERVER
-		private readonly Game _instance;
+		private static FontFamily _cnFont; // 内存分配
 
-		private FontFamily _cnFont; // 内存分配
-
-		private IntPtr _gXaudioDll;
-
-		private IntPtr _pXAudio2;
-
-		private static bool _userInput;
-
-		public CnsMain(Game game)
+		public static void PostInitialize()
 		{
-			_instance = game;
-
-			try
-			{
-				InitializeXAudio();
-				_instance.Exiting += OnExiting;
-			}
-			catch
-			{
-				// ignored
-			}
+			LanguageManager.Instance.SetLanguage(GameCulture.Chinese);
 		}
 
-		private void OnExiting(object sender, EventArgs eventArgs)
-		{
-			if (_pXAudio2 != IntPtr.Zero)
-			{
-				// release
-			}
-
-			if (_gXaudioDll != IntPtr.Zero)
-			{
-				FreeLibrary(_gXaudioDll);
-				_gXaudioDll = IntPtr.Zero;
-			}
-		}
-
-		private unsafe void InitializeXAudio()
-		{
-			_gXaudioDll = LoadLibraryEx("XAudio2_6.DLL", IntPtr.Zero, LoadLibrarySearchSystem32);
-
-			var xAudio2Out = IntPtr.Zero;
-			XAudio2Create_(&xAudio2Out, 0, DefaultProcessor);
-			_pXAudio2 = xAudio2Out;
-		}
-
-		public void Initialize()
-		{
-			ClaymanInputCaputure.Initialize(_instance.Window);
-		}
-
-		public void PostInitialize()
-		{
-			Lang.lang = 2;
-			Lang.setLang();
-		}
-
-		public void LoadFonts()
+		public static void LoadFonts()
 		{
 			const string fontFileName = "Font.tt*";
 
@@ -165,32 +114,22 @@ namespace Miyuu.Cns
 			}
 		}
 
-		public static void Update()
+		private static bool _hasListOld, _hasList;
+
+		public static bool GetInputText()
 		{
-			_userInput = ClaymanInputCaputure.ForceEnable || Main.drawingPlayerChat || Main.editSign || Main.editChest || Main.gameMenu && Main.menuMode == 888;
-			if (_userInput && !Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
+			_hasListOld = _hasList;
+			try
 			{
-				if (!ClaymanInputCaputure.Enabled)
-					ClaymanInputCaputure.OpenImm();
+				_hasList = Platform.Current.Ime.IsCandidateListVisible;
 			}
-			else if (ClaymanInputCaputure.Enabled)
+			catch
 			{
-				ClaymanInputCaputure.CloseImm();
+				// ignored
 			}
+
+			return Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Back) && (_hasListOld || _hasList);
 		}
-
-		[DllImport("kernel32.dll", SetLastError = true)]
-		private static extern IntPtr LoadLibraryEx(string dllToLoad, IntPtr hFile, uint flags);
-
-		[DllImport("kernel32", SetLastError = true)]
-		private static extern bool FreeLibrary(IntPtr hModule);
-
-		[DllImport("xaudio2_8.dll", EntryPoint = "XAudio2Create", CallingConvention = CallingConvention.StdCall)]
-		private static extern unsafe int XAudio2Create_(void* arg0, int arg1, int arg2);
-
-		private const uint LoadLibrarySearchSystem32 = 0x00000800;
-
-		private const int DefaultProcessor = 0x00000001;
 #endif
-			}
+	}
 }

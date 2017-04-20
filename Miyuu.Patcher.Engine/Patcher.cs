@@ -6,6 +6,7 @@ using System.Reflection;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
 using Miyuu.Patcher.Engine.Modifications;
+using Miyuu.TextWrapper;
 
 namespace Miyuu.Patcher.Engine
 {
@@ -48,6 +49,9 @@ namespace Miyuu.Patcher.Engine
 
 		public void Run()
 		{
+			new Converter(@"C:\Users\zitwa\Documents\texts", @"..\TerrariaTextsInChinese\Texts").Run();
+			Console.Read();
+
 			try
 			{
 				LoadAssembly();
